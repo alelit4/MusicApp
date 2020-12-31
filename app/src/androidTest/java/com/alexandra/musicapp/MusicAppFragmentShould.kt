@@ -20,7 +20,7 @@ class MusicAppFragmentShould {
 
     @Test
     fun load_app_name_in_fragment_catalog() {
-        val textView = onView(withId(R.id.title_music_app))
+        val textView = onView(withId(R.id.title_music_catalog))
         textView.check(matches(withText("MusicApp").also { isDisplayed() }))
     }
 

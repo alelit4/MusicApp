@@ -24,7 +24,7 @@ class FavoritesFragmentShould {
     @Before
     fun setUp(){
         val favoritesBottomNavigationItem = onView(
-            withId(R.id.fragment_favorites)
+            withId(R.id.fragment_favorite_music)
         )
         favoritesBottomNavigationItem.perform(click())
     }
@@ -32,7 +32,7 @@ class FavoritesFragmentShould {
     @Test
     fun load_title_in_fragment_favorites() {
 
-        val textView = onView(withId(R.id.title_favorites))
+        val textView = onView(withId(R.id.title_favorite_music))
         textView.check(matches(withText("Favorite music")))
     }
 }

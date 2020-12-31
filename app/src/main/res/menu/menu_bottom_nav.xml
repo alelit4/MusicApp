@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/fragment_music_app"
+    <item android:id="@+id/fragment_music_catalog"
         android:title="@string/catalog"
         android:icon="@drawable/ic_music_catalog"/>
 
-    <item android:id="@+id/fragment_favorites"
+    <item android:id="@+id/fragment_favorite_music"
         android:title="@string/favorites"
         android:icon="@drawable/ic_star"/>
 </menu>

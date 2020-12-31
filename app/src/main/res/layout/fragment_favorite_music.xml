@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
-    tools:context=".FavoritesFragment">
+    tools:context=".ui.favorites.FavoriteMusicFragment">
 
     <TextView
-        android:id="@+id/title_favorites"
+        android:id="@+id/title_favorite_music"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/favorite_music" />

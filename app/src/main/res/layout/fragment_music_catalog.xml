@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
-    tools:context=".MusicAppFragment">
+    tools:context=".ui.catalog.MusicCatalogFragment">
 
     <TextView
-        android:id="@+id/title_music_app"
+        android:id="@+id/title_music_catalog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/musicapp" />
