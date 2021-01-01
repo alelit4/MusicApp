@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.alexandra.musicapp.R
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_music_catalog.view.*
 
 @AndroidEntryPoint
 class MusicCatalogFragment : Fragment() {
@@ -16,7 +17,9 @@ class MusicCatalogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_music_catalog, container, false)
+        val mView =  inflater.inflate(R.layout.fragment_music_catalog, container, false)
+        mView.shimmer_catalog.showShimmer()
+        return mView
     }
 
 }
