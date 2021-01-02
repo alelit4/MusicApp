@@ -45,19 +45,14 @@ class CatalogViewModel @ViewModelInject constructor (
         }
     }
 
-    private fun handleArtistsResponse(response: Response<Catalog>): NetworkResult<Catalog>? {
-        when {
-            response.body()!!.results.isNullOrEmpty() -> {
-                return NetworkResult.Error("Artist not found")
-            }
-            response.isSuccessful -> {
-                val artists = response.body()
-                return NetworkResult.Success(artists!!)
+    private fun handleArtistsResponse(response: Catalog): NetworkResult<Catalog>? {
+        return when {
+            response.results.isNullOrEmpty() -> {
+                NetworkResult.Error("Artist not found")
             }
             else -> {
-                return NetworkResult.Error(response.message())
+                NetworkResult.Success(response)
             }
-
         }
     }
 

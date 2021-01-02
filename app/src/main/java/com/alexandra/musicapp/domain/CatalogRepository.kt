@@ -5,5 +5,5 @@ import retrofit2.Response
 import retrofit2.http.QueryMap
 
 interface CatalogRepository  {
-    suspend fun searchArtists(@QueryMap searchQuery: Map<String, String>): Response<Catalog>
+    suspend fun searchArtists(@QueryMap searchQuery: Map<String, String>): Catalog
 }

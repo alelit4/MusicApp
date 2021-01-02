@@ -38,8 +38,8 @@ class MusicCatalogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         catalogViewModel = (activity as MainActivity).catalogViewModel
         val artistResponse = catalogViewModel.catalogResponse.value
-        if (artistResponse != null)
-            catalogAdapter.setData(artistResponse.data as Catalog)
+        if (artistResponse?.data != null)
+            catalogAdapter.setData(artistResponse.data)
         // TODO delete it mocked data
       requestApiData()
     }

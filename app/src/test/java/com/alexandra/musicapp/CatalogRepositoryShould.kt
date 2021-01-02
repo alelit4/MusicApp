@@ -10,6 +10,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.runners.MockitoJUnitRunner
 import retrofit2.Response
@@ -19,7 +20,6 @@ class CatalogRepositoryShould {
 
     @Mock
     private lateinit var catalogApiService: CatalogApiService
-
 
     @Test
     fun search_artist_by_name() = runBlocking {
