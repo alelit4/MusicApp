@@ -30,15 +30,12 @@ class CatalogRepositoryShould {
         val fakeNetworkResult = Response.success(fakeCatalog)
         val fakeQuery: HashMap<String, String> = HashMap()
         fakeQuery[Constants.QUERY_TERM] = "anArtistName"
-
         `when`(catalogApiService.searchArtists(fakeQuery))
             .thenReturn(fakeNetworkResult)
+
         val repository = CatalogApiRepository(catalogApiService)
-
         val response = repository.searchArtists(fakeQuery)
-        Assert.assertTrue(response.isSuccessful)
-        Assert.assertEquals(response, fakeNetworkResult)
 
+        Assert.assertEquals(fakeCatalog, response)
     }
-
 }
