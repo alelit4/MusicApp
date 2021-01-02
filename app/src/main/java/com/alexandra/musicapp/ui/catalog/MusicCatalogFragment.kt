@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alexandra.musicapp.R
+import com.alexandra.musicapp.domain.models.Catalog
 import com.alexandra.musicapp.domain.utils.NetworkResult
+import com.alexandra.musicapp.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_music_catalog.view.*
 
@@ -22,18 +23,25 @@ class MusicCatalogFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        catalogViewModel = ViewModelProvider(requireActivity()).get(CatalogViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         mView =  inflater.inflate(R.layout.fragment_music_catalog, container, false)
         setUpRecyclerView()
-        requestApiData()
         return mView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        catalogViewModel = (activity as MainActivity).catalogViewModel
+        val artistResponse = catalogViewModel.catalogResponse.value
+        if (artistResponse != null)
+            catalogAdapter.setData(artistResponse.data as Catalog)
+        // TODO delete it mocked data
+      requestApiData()
     }
 
     private fun setUpRecyclerView() {

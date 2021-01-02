@@ -2,12 +2,14 @@ package com.alexandra.musicapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.alexandra.musicapp.R
+import com.alexandra.musicapp.ui.catalog.CatalogViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -15,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
+    lateinit var catalogViewModel: CatalogViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
         bottom_navigation.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        catalogViewModel = ViewModelProvider(this).get(CatalogViewModel::class.java)
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -4,8 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -21,7 +19,7 @@ import com.alexandra.musicapp.utils.Constants.Companion.QUERY_TERM
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class CatalogViewModel@ViewModelInject constructor (
+class CatalogViewModel @ViewModelInject constructor (
     private val repository: CatalogRepository,
     application: Application
 ): AndroidViewModel(application) {
