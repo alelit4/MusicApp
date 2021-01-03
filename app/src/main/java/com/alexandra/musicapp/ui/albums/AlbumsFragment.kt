@@ -21,7 +21,7 @@ class AlbumsFragment : Fragment() {
 
     private val argArtist by navArgs<AlbumsFragmentArgs>()
     private val albumsViewModel: AlbumsViewModel by activityViewModels()
-    private val artistViewModel: QueriesViewModel by viewModels()
+    private val queriesViewModel: QueriesViewModel by viewModels()
     private lateinit var mView: View
     private val mAdapter by lazy { AlbumsAdapter() }
 
@@ -46,7 +46,7 @@ class AlbumsFragment : Fragment() {
 
     private fun requestApiData(artistId: String) {
         showShimmerEffect()
-        albumsViewModel.searchAlbums(artistViewModel.retrieveSearchArtistWorkQuery(artistId))
+        albumsViewModel.searchAlbums(queriesViewModel.retrieveSearchArtistWorkQuery(artistId))
         albumsViewModel.albumsResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is NetworkResult.Success -> {
