@@ -44,7 +44,9 @@ repository interfaces, custom network management
 Some examples of the use:
 
 ⚡️\[GET\] Artist by ***name***
+
 https://itunes.apple.com/search?term=***name***&entity=allArtist&attribute=allArtistTerm&limit=25
 
 ⚡️\[GET\] Artist work by ***artistId***
+
 https://itunes.apple.com/lookup?id=***artistId***&entity=album
