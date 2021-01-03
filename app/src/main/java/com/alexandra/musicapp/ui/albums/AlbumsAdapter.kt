@@ -11,7 +11,7 @@ import com.alexandra.musicapp.ui.CustomDiffUtils
 
 class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>() {
 
-    private var albums =  emptyList<Album>()
+    private var albums =  mutableListOf<Album>()
 
     class AlbumViewHolder(private val binding: RowLayoutAlbumBinding) :
             RecyclerView.ViewHolder(binding.root) {
@@ -49,7 +49,13 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>() {
     fun setData(albums: List<Album>) {
         val customDiffUtil = CustomDiffUtils(this.albums, albums)
         val diffUtilResult = DiffUtil.calculateDiff(customDiffUtil)
-        this.albums = albums
+        this.albums = albums as MutableList<Album>
         diffUtilResult.dispatchUpdatesTo(this)
+    }
+
+    fun addData(catalog: List<Album>) {
+        val index = this.albums.size
+        this.albums.addAll(catalog)
+        notifyItemInserted(index)
     }
 }

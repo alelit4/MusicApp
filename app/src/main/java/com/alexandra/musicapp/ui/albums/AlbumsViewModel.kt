@@ -15,7 +15,8 @@ class AlbumsViewModel @ViewModelInject constructor (
     private val repository: AlbumsRepository,
     application: Application
 ): AndroidViewModel(application) {
-
+    var offset: Int = 0
+    var queryArtistId: String = ""
     var albumsResponse: MutableLiveData<NetworkResult<List<Album>>> = MutableLiveData()
 
     fun searchAlbums(searchQuery: Map<String, String>) = viewModelScope.launch {

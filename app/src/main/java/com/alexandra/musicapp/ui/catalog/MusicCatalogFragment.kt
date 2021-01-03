@@ -52,8 +52,8 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(artistName: String?): Boolean {
         if (artistName != null) {
-            queriesViewModel.queryArtistName = artistName
-            queriesViewModel.offset = 0
+            catalogViewModel.queryArtistName = artistName
+            catalogViewModel.offset = 0
             requestArtistsByNamePaged(artistName, queriesViewModel.blockSize)
         }
         return true
@@ -72,8 +72,8 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         val scrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && queriesViewModel.queryArtistName.isNotEmpty()) {
-                    requestArtistsByNamePaged(queriesViewModel.queryArtistName, queriesViewModel.blockSize)
+                if (!recyclerView.canScrollVertically(1) && catalogViewModel.queryArtistName.isNotEmpty()) {
+                    requestArtistsByNamePaged(catalogViewModel.queryArtistName, queriesViewModel.blockSize)
                 }
             }
         }
@@ -82,13 +82,14 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun requestArtistsByNamePaged(artistName: String, blockSize: Int) {
         showShimmerEffect()
-        val searchQuery = queriesViewModel.retrieveSearchArtistsQuery(artistName, blockSize, queriesViewModel.offset)
+        val searchQuery = queriesViewModel.retrieveSearchArtistsQuery(artistName, blockSize, catalogViewModel.offset)
         catalogViewModel.searchArtists(searchQuery)
         catalogViewModel.artistsResponse.observe(viewLifecycleOwner,
             { response ->
                 when (response) {
                     is NetworkResult.Success -> updateData(response, blockSize)
                     is NetworkResult.Error -> showError(response)
+                    is NetworkResult.Loading -> showShimmerEffect()
                 }
             })
     }
@@ -101,22 +102,22 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun updateData(response: NetworkResult<List<Artist>>, blockSize: Int) {
         hideShimmerEffect()
         response.data?.let {
-            when (queriesViewModel.offset) {
+            when (catalogViewModel.offset) {
                 0 -> catalogAdapter.setData(it)
                 else -> catalogAdapter.addData(it)
             }
-            this.queriesViewModel.offset += blockSize
+            this.catalogViewModel.offset += blockSize
         }
     }
 
     private fun showShimmerEffect() {
-        if (queriesViewModel.offset == 0){
+        if (catalogViewModel.offset == 0){
             mView.shimmer_catalog.showShimmer()
         }
     }
 
     private fun hideShimmerEffect() {
-        if (queriesViewModel.offset == 0) {
+        if (catalogViewModel.offset == 0) {
             mView.shimmer_catalog.hideShimmer()
         }
     }
