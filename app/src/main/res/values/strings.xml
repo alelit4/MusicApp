@@ -6,4 +6,5 @@
     <string name="favorites">Favorites</string>
     <string name="favorite_music">Favorite music</string>
     <string name="catalog">Catalog</string>
+    <string name="search">Search an artist ...</string>
 </resources>
