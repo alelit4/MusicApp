@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alexandra.musicapp.R
 import com.alexandra.musicapp.domain.models.Catalog
@@ -19,7 +21,7 @@ class MusicCatalogFragment : Fragment() {
 
     private lateinit var mView: View
     private val catalogAdapter by lazy { CatalogAdapter() }
-    private lateinit var catalogViewModel: CatalogViewModel
+    private val catalogViewModel: CatalogViewModel by  activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,6 @@ class MusicCatalogFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        catalogViewModel = (activity as MainActivity).catalogViewModel
         val artistResponse = catalogViewModel.catalogResponse.value
         if (artistResponse?.data != null)
             catalogAdapter.setData(artistResponse.data)

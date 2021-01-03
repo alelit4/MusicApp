@@ -14,7 +14,6 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
 
     class CatalogViewHolder(private val binding: ArtistRowLayoutBinding):
     RecyclerView.ViewHolder(binding.root) {
-
         fun bind(artist: Artist){
             binding.artist = artist
             binding.executePendingBindings()

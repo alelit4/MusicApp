@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
-    lateinit var catalogViewModel: CatalogViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,15 +26,11 @@ class MainActivity : AppCompatActivity() {
         val navBottomFragments = setOf(R.id.fragment_music_catalog, R.id.fragment_favorite_music)
         val appBarConfiguration = AppBarConfiguration(navBottomFragments)
 
-
         bottom_navigation.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        catalogViewModel = ViewModelProvider(this).get(CatalogViewModel::class.java)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
-
     }
 }

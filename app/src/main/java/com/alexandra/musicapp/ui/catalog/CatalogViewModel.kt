@@ -17,7 +17,6 @@ import com.alexandra.musicapp.utils.Constants.Companion.QUERY_ATTRIBUTE
 import com.alexandra.musicapp.utils.Constants.Companion.QUERY_ENTITY
 import com.alexandra.musicapp.utils.Constants.Companion.QUERY_TERM
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class CatalogViewModel @ViewModelInject constructor (
     private val repository: CatalogRepository,
@@ -45,7 +44,7 @@ class CatalogViewModel @ViewModelInject constructor (
         }
     }
 
-    private fun handleArtistsResponse(response: Catalog): NetworkResult<Catalog>? {
+    private fun handleArtistsResponse(response: Catalog): NetworkResult<Catalog> {
         return when {
             response.results.isNullOrEmpty() -> {
                 NetworkResult.Error("Artist not found")
