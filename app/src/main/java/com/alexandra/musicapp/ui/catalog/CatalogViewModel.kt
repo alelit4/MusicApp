@@ -39,12 +39,8 @@ class CatalogViewModel @ViewModelInject constructor (
 
     private fun handleArtistsResponse(response: List<Artist>): NetworkResult<List<Artist>> {
         return when {
-            response.isNullOrEmpty() -> {
-                NetworkResult.Error("Artist not found")
-            }
-            else -> {
-                NetworkResult.Success(response)
-            }
+            response.isNullOrEmpty() -> NetworkResult.Error("No data")
+            else -> NetworkResult.Success(response)
         }
     }
 }

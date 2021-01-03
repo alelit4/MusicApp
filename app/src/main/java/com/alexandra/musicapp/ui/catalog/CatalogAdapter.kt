@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.row_layout_artist.view.*
 
 class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
 
-    private var catalog = emptyList<Artist>()
+    private var artists = mutableListOf<Artist>()
 
     class CatalogViewHolder(private val binding: RowLayoutArtistBinding):
     RecyclerView.ViewHolder(binding.root) {
@@ -36,24 +36,31 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: CatalogViewHolder, position: Int) {
-        val currentResult = catalog[position]
+        val currentResult = artists[position]
         holder.bind(currentResult)
         holder.itemView.row_layout_artist.setOnClickListener {
-            currentResult.artistName
             Toast.makeText(holder.itemView.context, currentResult.artistName, Toast.LENGTH_LONG).show()
-            val action = MusicCatalogFragmentDirections.actionFragmentMusicCatalogToFragmentAlbums(currentResult.artistId.toString())
+            val action = MusicCatalogFragmentDirections.actionFragmentMusicCatalogToFragmentAlbums(
+                currentResult.artistId.toString()
+            )
             holder.itemView.findNavController().navigate(action)
         }
     }
 
     override fun getItemCount(): Int {
-        return catalog.size
+        return artists.size
     }
 
     fun setData(catalog: List<Artist>){
-        val artistsDiffUtil = CustomDiffUtils(this.catalog, catalog)
+        val artistsDiffUtil = CustomDiffUtils(this.artists, catalog)
         val diffUtilResult = DiffUtil.calculateDiff(artistsDiffUtil)
-        this.catalog = catalog
+        this.artists = catalog as MutableList<Artist>
         diffUtilResult.dispatchUpdatesTo(this)
+    }
+
+    fun addData(catalog: List<Artist>) {
+        val index = this.artists.size
+        this.artists.addAll(catalog)
+        notifyItemInserted(index)
     }
 }

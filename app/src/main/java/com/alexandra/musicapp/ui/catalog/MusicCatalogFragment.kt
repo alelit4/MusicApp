@@ -8,14 +8,16 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alexandra.musicapp.R
+import com.alexandra.musicapp.domain.models.Artist
 import com.alexandra.musicapp.domain.utils.NetworkResult
 import com.alexandra.musicapp.ui.QueriesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_music_catalog.view.*
 
 @AndroidEntryPoint
-class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener  {
+class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var mView: View
     private val catalogAdapter by lazy { CatalogAdapter() }
@@ -25,10 +27,11 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener  {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        mView =  inflater.inflate(R.layout.fragment_music_catalog, container, false)
+    ): View {
+        mView = inflater.inflate(R.layout.fragment_music_catalog, container, false)
         setHasOptionsMenu(true)
         setUpRecyclerView()
+        setUpScrollListener()
         return mView
     }
 
@@ -48,8 +51,11 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener  {
     }
 
     override fun onQueryTextSubmit(artistName: String?): Boolean {
-        if (artistName != null)
-            requestArtistsByName(artistName)
+        if (artistName != null) {
+            queriesViewModel.queryArtistName = artistName
+            queriesViewModel.offset = 0
+            requestArtistsByNamePaged(artistName, queriesViewModel.blockSize)
+        }
         return true
     }
 
@@ -62,29 +68,56 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener  {
         mView.shimmer_catalog.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun requestArtistsByName(artistName: String) {
-        showShimmerEffect()
-        catalogViewModel.searchArtists(queriesViewModel.retrieveSearchArtistsQuery(artistName))
-        catalogViewModel.artistsResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is NetworkResult.Success -> {
-                    hideShimmerEffect()
-                    response.data?.let { catalogAdapter.setData(it) }
-                }
-                is NetworkResult.Error -> {
-                    hideShimmerEffect()
-                    Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_LONG)
-                        .show()
+    private fun setUpScrollListener() {
+        val scrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1) && queriesViewModel.queryArtistName.isNotEmpty()) {
+                    requestArtistsByNamePaged(queriesViewModel.queryArtistName, queriesViewModel.blockSize)
                 }
             }
-        })
+        }
+        mView.shimmer_catalog.addOnScrollListener(scrollListener)
+    }
+
+    private fun requestArtistsByNamePaged(artistName: String, blockSize: Int) {
+        showShimmerEffect()
+        val searchQuery = queriesViewModel.retrieveSearchArtistsQuery(artistName, blockSize, queriesViewModel.offset)
+        catalogViewModel.searchArtists(searchQuery)
+        catalogViewModel.artistsResponse.observe(viewLifecycleOwner,
+            { response ->
+                when (response) {
+                    is NetworkResult.Success -> updateData(response, blockSize)
+                    is NetworkResult.Error -> showError(response)
+                }
+            })
+    }
+
+    private fun showError(response: NetworkResult<List<Artist>>) {
+        hideShimmerEffect()
+        Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateData(response: NetworkResult<List<Artist>>, blockSize: Int) {
+        hideShimmerEffect()
+        response.data?.let {
+            when (queriesViewModel.offset) {
+                0 -> catalogAdapter.setData(it)
+                else -> catalogAdapter.addData(it)
+            }
+            this.queriesViewModel.offset += blockSize
+        }
     }
 
     private fun showShimmerEffect() {
-        mView.shimmer_catalog.showShimmer()
+        if (queriesViewModel.offset == 0){
+            mView.shimmer_catalog.showShimmer()
+        }
     }
 
     private fun hideShimmerEffect() {
-        mView.shimmer_catalog.hideShimmer()
+        if (queriesViewModel.offset == 0) {
+            mView.shimmer_catalog.hideShimmer()
+        }
     }
 }
