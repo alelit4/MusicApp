@@ -1,10 +1,9 @@
-package com.alexandra.musicapp.ui.catalog
+package com.alexandra.musicapp.ui
 
 import androidx.recyclerview.widget.DiffUtil
-import com.alexandra.musicapp.domain.models.Artist
 
-class CatalogDiffUtils(private val oldList: List<Artist>,
-private val newList: List<Artist>): DiffUtil.Callback() {
+class CustomDiffUtils<T>(private val oldList: List<T>,
+                      private val newList: List<T>): DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldList.size
     }

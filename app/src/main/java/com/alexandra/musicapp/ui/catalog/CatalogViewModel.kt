@@ -1,52 +1,45 @@
 package com.alexandra.musicapp.ui.catalog
 
 import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.alexandra.musicapp.domain.repositories.CatalogRepository
-import com.alexandra.musicapp.domain.models.Catalog
+import com.alexandra.musicapp.data.Connectivity.Companion.hasInternetConnection
+import com.alexandra.musicapp.domain.models.Artist
+import com.alexandra.musicapp.domain.repositories.ArtistsRepository
 import com.alexandra.musicapp.domain.utils.NetworkResult
-import com.alexandra.musicapp.utils.Constants.Companion.ALL_ARTIST
-import com.alexandra.musicapp.utils.Constants.Companion.ALL_ARTIST_TERM
-import com.alexandra.musicapp.utils.Constants.Companion.QUERY_ATTRIBUTE
-import com.alexandra.musicapp.utils.Constants.Companion.QUERY_ENTITY
-import com.alexandra.musicapp.utils.Constants.Companion.QUERY_TERM
 import kotlinx.coroutines.launch
 
 class CatalogViewModel @ViewModelInject constructor (
-    private val repository: CatalogRepository,
+    private val repository: ArtistsRepository,
     application: Application
 ): AndroidViewModel(application) {
 
-    var catalogResponse: MutableLiveData<NetworkResult<Catalog>> = MutableLiveData()
+    var artistsResponse: MutableLiveData<NetworkResult<List<Artist>>> = MutableLiveData()
 
     fun searchArtists(searchQuery: Map<String, String>) = viewModelScope.launch {
         searchArtistsSafeCall(searchQuery)
     }
 
     private suspend fun searchArtistsSafeCall(queries: Map<String, String>) {
-        catalogResponse.value = NetworkResult.Loading()
-        if(hasInternetConnection()){
+        artistsResponse.value = NetworkResult.Loading()
+        if(hasInternetConnection(getApplication<Application>())){
             try {
                 val response = repository.searchArtists(queries)
-                catalogResponse.value = handleArtistsResponse(response)
+                artistsResponse.value = handleArtistsResponse(response)
             }catch (e: Exception){
-                catalogResponse.value = NetworkResult.Error("Artist not found")
+                artistsResponse.value = NetworkResult.Error("Problem finding artist")
             }
         }
         else{
-            catalogResponse.value = NetworkResult.Error("No Internet connection")
+            artistsResponse.value = NetworkResult.Error("No Internet connection")
         }
     }
 
-    private fun handleArtistsResponse(response: Catalog): NetworkResult<Catalog> {
+    private fun handleArtistsResponse(response: List<Artist>): NetworkResult<List<Artist>> {
         return when {
-            response.results.isNullOrEmpty() -> {
+            response.isNullOrEmpty() -> {
                 NetworkResult.Error("Artist not found")
             }
             else -> {
@@ -54,29 +47,4 @@ class CatalogViewModel @ViewModelInject constructor (
             }
         }
     }
-
-    private fun hasInternetConnection(): Boolean{
-        val connectivityManager = getApplication<Application>().getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-
-        val activeNetwork = connectivityManager.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-        return when {
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            else -> false
-        }
-
-    }
-
-    fun retrieveDemoQuery(): HashMap<String, String>{
-        val queries: HashMap<String, String> = HashMap()
-        queries[QUERY_TERM] = "oreja"
-        queries[QUERY_ENTITY] = ALL_ARTIST
-        queries[QUERY_ATTRIBUTE] = ALL_ARTIST_TERM
-        return queries
-    }
-
 }

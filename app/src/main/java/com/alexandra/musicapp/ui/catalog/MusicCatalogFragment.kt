@@ -34,7 +34,7 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val artistResponse = catalogViewModel.catalogResponse.value
+        val artistResponse = catalogViewModel.artistsResponse.value
         if (artistResponse?.data != null)
             catalogAdapter.setData(artistResponse.data)
     }
@@ -65,7 +65,7 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener  {
     private fun requestArtistsByName(artistName: String) {
         showShimmerEffect()
         catalogViewModel.searchArtists(queriesViewModel.retrieveSearchArtistsQuery(artistName))
-        catalogViewModel.catalogResponse.observe(viewLifecycleOwner, { response ->
+        catalogViewModel.artistsResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()

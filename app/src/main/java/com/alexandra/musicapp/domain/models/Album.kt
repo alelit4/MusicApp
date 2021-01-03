@@ -1,8 +1,6 @@
-package com.alexandra.foodyapp.models
-
+package com.alexandra.musicapp.domain.models
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class Album(
     @SerializedName("artistId")
@@ -12,8 +10,7 @@ data class Album(
     @SerializedName("collectionName")
     val collectionName: String,
     @SerializedName("artworkUrl100")
-    val image :String,
+    val imageUrl: String,
     @SerializedName("releaseDate")
-    val releaseDate: Date,
-
-    )
+    val releaseDate: String,
+)

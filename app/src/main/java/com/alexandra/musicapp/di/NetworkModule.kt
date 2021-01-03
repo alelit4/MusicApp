@@ -2,7 +2,8 @@ package com.alexandra.musicapp.di
 
 import com.alexandra.musicapp.data.api.MusicApiService
 import com.alexandra.musicapp.data.repository.MusicApiRepository
-import com.alexandra.musicapp.domain.repositories.CatalogRepository
+import com.alexandra.musicapp.domain.repositories.AlbumsRepository
+import com.alexandra.musicapp.domain.repositories.ArtistsRepository
 import com.alexandra.musicapp.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -49,7 +50,13 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideMusicApiRepository(musicApiService: MusicApiService): CatalogRepository {
+    fun provideCatalogRepository(musicApiService: MusicApiService): ArtistsRepository {
+        return MusicApiRepository(musicApiService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAlbumsRepository(musicApiService: MusicApiService): AlbumsRepository {
         return MusicApiRepository(musicApiService)
     }
 }
