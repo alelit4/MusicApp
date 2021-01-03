@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_fragment_favorite_music_to_fragment_music_catalog"
             app:destination="@id/fragment_music_catalog" />
+        <action
+            android:id="@+id/action_fragment_favorite_music_to_fragment_albums"
+            app:destination="@id/fragment_albums" />
     </fragment>
     <fragment
         android:id="@+id/fragment_albums"
@@ -34,5 +37,8 @@
         <action
             android:id="@+id/action_fragment_albums_to_fragment_music_catalog"
             app:destination="@id/fragment_music_catalog" />
+        <argument
+            android:name="ArtistId"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -1,12 +1,10 @@
 package com.alexandra.musicapp
 
-import com.alexandra.foodyapp.models.Album
-import com.alexandra.foodyapp.models.ArtistWork
 import com.alexandra.musicapp.data.api.MusicApiService
+import com.alexandra.musicapp.data.models.Responses
 import com.alexandra.musicapp.data.repository.MusicApiRepository
+import com.alexandra.musicapp.domain.models.Album
 import com.alexandra.musicapp.domain.models.Artist
-import com.alexandra.musicapp.domain.models.Catalog
-import com.alexandra.musicapp.utils.Constants
 import com.alexandra.musicapp.utils.Constants.Companion.ALBUM
 import com.alexandra.musicapp.utils.Constants.Companion.ALL_ARTIST
 import com.alexandra.musicapp.utils.Constants.Companion.ALL_ARTIST_TERM
@@ -20,9 +18,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Response
-import java.util.*
 import kotlin.collections.HashMap
 
 @RunWith(MockitoJUnitRunner::class)
@@ -36,8 +33,8 @@ class MusicApiRepositoryShould {
 
         val fakeArtist = Artist(1, 1, "anArtistName", "anArtistType", "aGenreName")
         val fakeArtistList = listOf(fakeArtist)
-        val fakeCatalog = Catalog(fakeArtistList.size, fakeArtistList)
-        val fakeNetworkResult = Response.success(fakeCatalog)
+        val fakeArtistListResponse = Responses<Artist>(fakeArtistList.size, fakeArtistList)
+        val fakeNetworkResult = Response.success(fakeArtistListResponse)
         val fakeQuery: HashMap<String, String> = HashMap()
         fakeQuery[QUERY_TERM] = "anArtistName"
         fakeQuery[QUERY_ENTITY] = ALL_ARTIST
@@ -48,15 +45,15 @@ class MusicApiRepositoryShould {
         val repository = MusicApiRepository(musicApiService)
         val response = repository.searchArtists(fakeQuery)
 
-        Assert.assertEquals(fakeCatalog, response)
+        Assert.assertEquals(fakeArtistList, response)
     }
 
     @Test
     fun search_album_by_artist_id() = runBlocking {
         val fakeArtistId = 1
-        val fakeAlbum = Album(fakeArtistId, 1, "aCollectionName", "anImageUrl", Date())
+        val fakeAlbum = Album(fakeArtistId, 1, "aCollectionName", "anImageUrl", "aReleaseDate")
         val fakeAlbumList = listOf(fakeAlbum)
-        val fakeArtistWork = ArtistWork(fakeAlbumList.size, fakeAlbumList)
+        val fakeArtistWork = Responses<Album>(fakeAlbumList.size, fakeAlbumList)
         val fakeNetworkResult = Response.success(fakeArtistWork)
         val fakeQuery: HashMap<String, String> = HashMap()
         fakeQuery[QUERY_ENTITY] = ALBUM
@@ -67,6 +64,6 @@ class MusicApiRepositoryShould {
         val repository = MusicApiRepository(musicApiService)
         val response = repository.searchAlbums(fakeQuery)
 
-        Assert.assertEquals(fakeArtistWork, response)
+        Assert.assertEquals(fakeAlbumList, response)
     }
 }

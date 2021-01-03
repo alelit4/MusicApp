@@ -6,17 +6,16 @@ import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.alexandra.musicapp.R
-import com.alexandra.musicapp.databinding.ArtistRowLayoutBinding
+import com.alexandra.musicapp.databinding.RowLayoutArtistBinding
 import com.alexandra.musicapp.domain.models.Artist
-import com.alexandra.musicapp.domain.models.Catalog
-import kotlinx.android.synthetic.main.artist_row_layout.view.*
+import com.alexandra.musicapp.ui.CustomDiffUtils
+import kotlinx.android.synthetic.main.row_layout_artist.view.*
 
 class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
 
     private var catalog = emptyList<Artist>()
 
-    class CatalogViewHolder(private val binding: ArtistRowLayoutBinding):
+    class CatalogViewHolder(private val binding: RowLayoutArtistBinding):
     RecyclerView.ViewHolder(binding.root) {
         fun bind(artist: Artist){
             binding.artist = artist
@@ -26,7 +25,7 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
         companion object {
             fun from(parent: ViewGroup): CatalogViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ArtistRowLayoutBinding.inflate(layoutInflater, parent, false)
+                val binding = RowLayoutArtistBinding.inflate(layoutInflater, parent, false)
                 return CatalogViewHolder(binding)
             }
         }
@@ -39,11 +38,11 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
     override fun onBindViewHolder(holder: CatalogViewHolder, position: Int) {
         val currentResult = catalog[position]
         holder.bind(currentResult)
-        holder.itemView.artist_row_layout.setOnClickListener {
+        holder.itemView.row_layout_artist.setOnClickListener {
             currentResult.artistName
             Toast.makeText(holder.itemView.context, currentResult.artistName, Toast.LENGTH_LONG).show()
-          //  val action = CatalogFragmentDirections.actionMusicAppFragmentToAlbumsFragment(currentResult.artistId.toString())
-            holder.itemView.findNavController().navigate(R.id.fragment_albums)
+            val action = MusicCatalogFragmentDirections.actionFragmentMusicCatalogToFragmentAlbums(currentResult.artistId.toString())
+            holder.itemView.findNavController().navigate(action)
         }
     }
 
@@ -51,10 +50,10 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
         return catalog.size
     }
 
-    fun setData(newCatalog: Catalog){
-        val artistsDiffUtil = CatalogDiffUtils(catalog, newCatalog.results)
+    fun setData(catalog: List<Artist>){
+        val artistsDiffUtil = CustomDiffUtils(this.catalog, catalog)
         val diffUtilResult = DiffUtil.calculateDiff(artistsDiffUtil)
-        catalog = newCatalog.results
+        this.catalog = catalog
         diffUtilResult.dispatchUpdatesTo(this)
     }
 }

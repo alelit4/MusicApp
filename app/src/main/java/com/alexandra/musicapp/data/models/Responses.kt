@@ -1,11 +1,10 @@
-package com.alexandra.foodyapp.models
-
+package com.alexandra.musicapp.data.models
 
 import com.google.gson.annotations.SerializedName
 
-data class ArtistWork(
+data class Responses<T>(
     @SerializedName("resultCount")
     val resultCount: Int,
     @SerializedName("results")
-    var results: List<Album>
+    val results: List<T>
 )
