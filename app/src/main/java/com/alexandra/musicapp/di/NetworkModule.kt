@@ -1,8 +1,8 @@
 package com.alexandra.musicapp.di
 
-import com.alexandra.musicapp.data.api.CatalogApiService
-import com.alexandra.musicapp.data.repository.CatalogApiRepository
-import com.alexandra.musicapp.domain.CatalogRepository
+import com.alexandra.musicapp.data.api.MusicApiService
+import com.alexandra.musicapp.data.repository.MusicApiRepository
+import com.alexandra.musicapp.domain.repositories.CatalogRepository
 import com.alexandra.musicapp.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -43,13 +43,13 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCatalogApiService(retrofit: Retrofit): CatalogApiService {
-        return retrofit.create(CatalogApiService::class.java)
+    fun provideMusicApiService(retrofit: Retrofit): MusicApiService {
+        return retrofit.create(MusicApiService::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideCatalogRepository(catalogApiService: CatalogApiService): CatalogRepository {
-        return CatalogApiRepository(catalogApiService)
+    fun provideMusicApiRepository(musicApiService: MusicApiService): CatalogRepository {
+        return MusicApiRepository(musicApiService)
     }
 }

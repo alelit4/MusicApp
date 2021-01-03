@@ -8,7 +8,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.alexandra.musicapp.domain.CatalogRepository
+import com.alexandra.musicapp.domain.repositories.CatalogRepository
 import com.alexandra.musicapp.domain.models.Catalog
 import com.alexandra.musicapp.domain.utils.NetworkResult
 import com.alexandra.musicapp.utils.Constants.Companion.ALL_ARTIST
