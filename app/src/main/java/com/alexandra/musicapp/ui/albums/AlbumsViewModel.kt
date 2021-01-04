@@ -48,6 +48,4 @@ class AlbumsViewModel @ViewModelInject constructor (
             }
         }
     }
-
-
 }

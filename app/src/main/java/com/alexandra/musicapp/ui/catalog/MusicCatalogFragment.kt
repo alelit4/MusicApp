@@ -72,42 +72,54 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         val scrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && catalogViewModel.queryArtistName.isNotEmpty()) {
+                if (couldLoadData(recyclerView)) {
                     requestArtistsByNamePaged(catalogViewModel.queryArtistName, queriesViewModel.blockSize)
                 }
             }
         }
         mView.shimmer_catalog.addOnScrollListener(scrollListener)
-    }
-
-    private fun requestArtistsByNamePaged(artistName: String, blockSize: Int) {
-        showShimmerEffect()
-        val searchQuery = queriesViewModel.retrieveSearchArtistsQuery(artistName, blockSize, catalogViewModel.offset)
-        catalogViewModel.searchArtists(searchQuery)
         catalogViewModel.artistsResponse.observe(viewLifecycleOwner,
             { response ->
                 when (response) {
-                    is NetworkResult.Success -> updateData(response, blockSize)
+                    is NetworkResult.Success -> updateData(response, queriesViewModel.blockSize)
                     is NetworkResult.Error -> showError(response)
                     is NetworkResult.Loading -> showShimmerEffect()
                 }
             })
     }
 
+    private fun couldLoadData(recyclerView: RecyclerView): Boolean {
+        return !recyclerView.canScrollVertically(1)
+                && catalogViewModel.queryArtistName.isNotEmpty()
+                && !catalogViewModel.isLoading
+    }
+
+    private fun requestArtistsByNamePaged(artistName: String, blockSize: Int) {
+        showShimmerEffect()
+        catalogViewModel.isLoading = true
+        val searchQuery = queriesViewModel.retrieveSearchArtistsQuery(artistName, blockSize, catalogViewModel.offset)
+        catalogViewModel.searchArtists(searchQuery)
+
+    }
+
     private fun showError(response: NetworkResult<List<Artist>>) {
         hideShimmerEffect()
+        catalogViewModel.isLoading = false
         Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun updateData(response: NetworkResult<List<Artist>>, blockSize: Int) {
         hideShimmerEffect()
-        response.data?.let {
-            when (catalogViewModel.offset) {
-                0 -> catalogAdapter.setData(it)
-                else -> catalogAdapter.addData(it)
+        response.data?.let { data ->
+            if (data.isNotEmpty()){
+                when (catalogViewModel.offset) {
+                    0 -> {catalogAdapter.setData(data)}
+                    else ->{ catalogAdapter.addData(data)}
+                }
+                this.catalogViewModel.offset += data.size
             }
-            this.catalogViewModel.offset += blockSize
         }
+        catalogViewModel.isLoading = false
     }
 
     private fun showShimmerEffect() {
@@ -120,5 +132,9 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         if (catalogViewModel.offset == 0) {
             mView.shimmer_catalog.hideShimmer()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 }

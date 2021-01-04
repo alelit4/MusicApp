@@ -16,6 +16,7 @@ class CatalogViewModel @ViewModelInject constructor (
     application: Application
 ): AndroidViewModel(application) {
     var offset: Int = 0
+    var isLoading: Boolean = false
     var queryArtistName: String = ""
     var artistsResponse: MutableLiveData<NetworkResult<List<Artist>>> = MutableLiveData()
 
@@ -40,8 +41,10 @@ class CatalogViewModel @ViewModelInject constructor (
 
     private fun handleArtistsResponse(response: List<Artist>): NetworkResult<List<Artist>> {
         return when {
-            response.isNullOrEmpty() -> NetworkResult.Error("No data")
+            response.isNullOrEmpty() && isFirstSearch() -> NetworkResult.Error("No data")
             else -> NetworkResult.Success(response)
         }
     }
+
+    private fun isFirstSearch() = this.offset == 0
 }

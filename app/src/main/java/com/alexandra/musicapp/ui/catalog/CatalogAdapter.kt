@@ -59,8 +59,8 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
     }
 
     fun addData(catalog: List<Artist>) {
-        val index = this.artists.size
+        val oldSize = this.artists.size
         this.artists.addAll(catalog)
-        notifyItemInserted(index)
+        notifyItemInserted(oldSize)
     }
 }
