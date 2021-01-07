@@ -2,9 +2,9 @@ package com.alexandra.musicapp.ui.catalog
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +31,8 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         mView = inflater.inflate(R.layout.fragment_music_catalog, container, false)
         setHasOptionsMenu(true)
         setUpRecyclerView()
-        setUpScrollListener()
+        setUpScrollHandler()
+        setUpAppLogoViewHandler()
         return mView
     }
 
@@ -68,23 +69,36 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         mView.shimmer_catalog.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun setUpScrollListener() {
-        val scrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+    private val scrollListener: RecyclerView.OnScrollListener =
+        object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (couldLoadData(recyclerView)) {
-                    requestArtistsByNamePaged(catalogViewModel.queryArtistName, queriesViewModel.blockSize)
+                    requestArtistsByNamePaged(
+                        catalogViewModel.queryArtistName,
+                        queriesViewModel.blockSize
+                    )
                 }
             }
         }
+
+    private fun setUpScrollHandler() {
         mView.shimmer_catalog.addOnScrollListener(scrollListener)
         catalogViewModel.artistsResponse.observe(viewLifecycleOwner,
             { response ->
                 when (response) {
-                    is NetworkResult.Success -> updateData(response, queriesViewModel.blockSize)
+                    is NetworkResult.Success -> updateView(response)
                     is NetworkResult.Error -> showError(response)
                     is NetworkResult.Loading -> showShimmerEffect()
                 }
+            })
+
+    }
+
+    private fun setUpAppLogoViewHandler() {
+        catalogAdapter.catalogSize.observe(viewLifecycleOwner,
+            { artistsSize ->
+                showAppLogo(artistsSize == 0)
             })
     }
 
@@ -97,9 +111,9 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun requestArtistsByNamePaged(artistName: String, blockSize: Int) {
         showShimmerEffect()
         catalogViewModel.isLoading = true
-        val searchQuery = queriesViewModel.retrieveSearchArtistsQuery(artistName, blockSize, catalogViewModel.offset)
+        val searchQuery = queriesViewModel.retrieveSearchArtistsQuery(
+            artistName, blockSize, catalogViewModel.offset)
         catalogViewModel.searchArtists(searchQuery)
-
     }
 
     private fun showError(response: NetworkResult<List<Artist>>) {
@@ -108,22 +122,24 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
     }
 
-    private fun updateData(response: NetworkResult<List<Artist>>, blockSize: Int) {
+    private fun updateView(response: NetworkResult<List<Artist>>) {
         hideShimmerEffect()
         response.data?.let { data ->
-            if (data.isNotEmpty()){
-                when (catalogViewModel.offset) {
-                    0 -> {catalogAdapter.setData(data)}
-                    else ->{ catalogAdapter.addData(data)}
-                }
-                this.catalogViewModel.offset += data.size
-            }
+            if (data.isNotEmpty()) updateArtists(data)
         }
         catalogViewModel.isLoading = false
     }
 
+    private fun updateArtists(data: List<Artist>) {
+        when (catalogViewModel.offset) {
+            0 -> catalogAdapter.setData(data)
+            else -> catalogAdapter.addData(data)
+        }
+        this.catalogViewModel.offset += data.size
+    }
+
     private fun showShimmerEffect() {
-        if (catalogViewModel.offset == 0){
+        if (catalogViewModel.offset == 0) {
             mView.shimmer_catalog.showShimmer()
         }
     }
@@ -134,7 +150,10 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
+    private fun showAppLogo(visible: Boolean) {
+        when {
+            visible -> mView.app_logo.visibility = View.VISIBLE
+            else -> mView.app_logo.visibility = View.GONE
+        }
     }
 }

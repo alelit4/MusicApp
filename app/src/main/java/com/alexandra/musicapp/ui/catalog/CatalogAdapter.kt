@@ -3,6 +3,8 @@ package com.alexandra.musicapp.ui.catalog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +16,7 @@ import kotlinx.android.synthetic.main.row_layout_artist.view.*
 class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
 
     private var artists = mutableListOf<Artist>()
+    val catalogSize: MutableLiveData<Int> = MutableLiveData(0)
 
     class CatalogViewHolder(private val binding: RowLayoutArtistBinding):
     RecyclerView.ViewHolder(binding.root) {
@@ -56,11 +59,15 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
         val diffUtilResult = DiffUtil.calculateDiff(artistsDiffUtil)
         this.artists = catalog as MutableList<Artist>
         diffUtilResult.dispatchUpdatesTo(this)
+        catalogSize.value = itemCount
     }
 
     fun addData(catalog: List<Artist>) {
         val oldSize = this.artists.size
         this.artists.addAll(catalog)
         notifyItemInserted(oldSize)
+        catalogSize.value = itemCount
     }
+
+
 }

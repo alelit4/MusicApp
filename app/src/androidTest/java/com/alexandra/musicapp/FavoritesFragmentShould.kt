@@ -33,7 +33,7 @@ class FavoritesFragmentShould {
     @Test
     fun load_title_in_fragment_favorites() {
 
-        val textView = onView(withId(R.id.title_favorite_music))
-        textView.check(matches(withText("Favorite music")))
+        val textView = onView(withId(R.id.favorite_music_title))
+        textView.check(matches(withText("No favorite music")))
     }
 }
