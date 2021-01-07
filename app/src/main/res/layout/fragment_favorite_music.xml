@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
     tools:context=".ui.favorites.FavoriteMusicFragment">
 
+
     <TextView
-        android:id="@+id/title_favorite_music"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/favorite_music" />
+        android:id="@+id/favorite_music_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:text="No favorite music"
+        android:textSize="20sp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favorite_music_image" />
+
+    <ImageView
+        android:id="@+id/favorite_music_image"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        android:contentDescription="Logo of the app"
+        android:src="@drawable/ic_star"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/favorite_music_title"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/favorite_music_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/medium_gray" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
