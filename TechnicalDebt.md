@@ -5,4 +5,5 @@
 * ~~Locking screen (portrait)~~
 * Adding animations
 * Adding main view logo when empty list
+* Responsive dimen
 
