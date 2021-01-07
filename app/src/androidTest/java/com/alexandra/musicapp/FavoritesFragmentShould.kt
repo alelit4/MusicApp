@@ -23,16 +23,13 @@ class FavoritesFragmentShould {
     var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
 
     @Before
-    fun setUp(){
-        val favoritesBottomNavigationItem = onView(
-            withId(R.id.fragment_favorite_music)
-        )
+    fun setUp() {
+        val favoritesBottomNavigationItem = onView(withId(R.id.fragment_favorite_music))
         favoritesBottomNavigationItem.perform(click())
     }
 
     @Test
     fun load_title_in_fragment_favorites() {
-
         val textView = onView(withId(R.id.favorite_music_title))
         textView.check(matches(withText("No favorite music")))
     }
