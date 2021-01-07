@@ -140,6 +140,7 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun showShimmerEffect() {
         if (catalogViewModel.offset == 0) {
+            showAppLogo(false)
             mView.shimmer_catalog.showShimmer()
         }
     }
