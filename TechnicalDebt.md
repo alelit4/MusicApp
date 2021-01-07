@@ -4,6 +4,6 @@
 * To implement favorite songs functionality
 * ~~Locking screen (portrait)~~
 * Adding animations
-* Adding main view logo when empty list
-* Responsive dimen
+* ~~Adding main view logo when empty list~~
+* Responsive dimensions
 
