@@ -44,7 +44,7 @@
                     android:layout_marginTop="16dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="@{artist.artistName}"
+                    android:text="@{artist.identification.artistName}"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"

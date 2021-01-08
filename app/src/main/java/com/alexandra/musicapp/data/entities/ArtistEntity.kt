@@ -17,6 +17,7 @@ class ArtistEntity (
 ){
     fun  asDomainModel(): Artist {
         val musicType = primaryGenreName ?: "No genre available"
-        return Artist(amgArtistId, artistId, artistName, artistType, musicType)
+        val identification: Artist.Identification = Artist.Identification(artistId, artistName)
+        return Artist(identification, amgArtistId, artistType, musicType)
     }
 }

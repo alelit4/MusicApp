@@ -2,8 +2,6 @@ package com.alexandra.musicapp.ui.catalog
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -42,9 +40,8 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
         val currentResult = artists[position]
         holder.bind(currentResult)
         holder.itemView.row_layout_artist.setOnClickListener {
-            Toast.makeText(holder.itemView.context, currentResult.artistName, Toast.LENGTH_LONG).show()
             val action = MusicCatalogFragmentDirections.actionFragmentMusicCatalogToFragmentAlbums(
-                currentResult.artistId.toString()
+                currentResult.identification.artistId.toString()
             )
             holder.itemView.findNavController().navigate(action)
         }
