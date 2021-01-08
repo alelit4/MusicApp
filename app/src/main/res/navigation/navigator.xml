@@ -38,7 +38,7 @@
             android:id="@+id/action_fragment_albums_to_fragment_music_catalog"
             app:destination="@id/fragment_music_catalog" />
         <argument
-            android:name="ArtistId"
-            app:argType="string" />
+            android:name="artistIdentification"
+            app:argType="com.alexandra.musicapp.domain.models.Artist$Identification" />
     </fragment>
 </navigation>

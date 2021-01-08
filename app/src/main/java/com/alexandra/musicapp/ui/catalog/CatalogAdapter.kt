@@ -41,7 +41,7 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
         holder.bind(currentResult)
         holder.itemView.row_layout_artist.setOnClickListener {
             val action = MusicCatalogFragmentDirections.actionFragmentMusicCatalogToFragmentAlbums(
-                currentResult.identification.artistId.toString()
+                currentResult.identification
             )
             holder.itemView.findNavController().navigate(action)
         }

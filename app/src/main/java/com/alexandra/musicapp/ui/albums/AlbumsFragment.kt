@@ -41,7 +41,8 @@ class AlbumsFragment : Fragment() {
         if (albumResponse?.data != null)
             albumsAdapter.setData(albumResponse.data)
         albumsViewModel.offset = 0
-        requestAlbumsByArtistIdPaged(argArtist.artistId)
+        val artist = argArtist.artistIdentification.artistId.toString()
+        requestAlbumsByArtistIdPaged(artist)
     }
 
     private fun setUpRecyclerView() {
