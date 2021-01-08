@@ -6,4 +6,8 @@
 * Adding animations
 * ~~Adding main view logo when empty list~~
 * Responsive dimensions
+* Set block size in query to 20
+* Constants to strings.xml
+* Change QueriesViewModel to QueriesHelper
+* 
 
