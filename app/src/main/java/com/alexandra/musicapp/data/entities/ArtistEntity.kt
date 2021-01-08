@@ -13,9 +13,10 @@ class ArtistEntity (
     @SerializedName("artistType")
     val artistType: String,
     @SerializedName("primaryGenreName")
-    val primaryGenreName: String,
+    var primaryGenreName: String?,
 ){
     fun  asDomainModel(): Artist {
-        return Artist(amgArtistId, artistId, artistName, artistType, primaryGenreName)
+        val musicType = primaryGenreName ?: "No genre available"
+        return Artist(amgArtistId, artistId, artistName, artistType, musicType)
     }
 }

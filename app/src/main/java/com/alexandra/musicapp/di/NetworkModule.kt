@@ -4,7 +4,6 @@ import com.alexandra.musicapp.data.api.MusicApiService
 import com.alexandra.musicapp.data.repository.MusicApiRepository
 import com.alexandra.musicapp.domain.repositories.AlbumsRepository
 import com.alexandra.musicapp.domain.repositories.ArtistsRepository
-import com.alexandra.musicapp.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +17,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 class NetworkModule {
+
+    companion object {
+        const val BASE_URL = "https://itunes.apple.com"
+    }
 
     @Singleton
     @Provides

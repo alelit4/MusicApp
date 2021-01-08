@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexandra.musicapp.R
 import com.alexandra.musicapp.domain.models.Album
 import com.alexandra.musicapp.domain.utils.NetworkResult
-import com.alexandra.musicapp.ui.QueriesViewModel
+import com.alexandra.musicapp.utils.QueriesHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_albums.view.*
 
@@ -23,7 +22,6 @@ class AlbumsFragment : Fragment() {
 
     private val argArtist by navArgs<AlbumsFragmentArgs>()
     private val albumsViewModel: AlbumsViewModel by activityViewModels()
-    private val queriesViewModel: QueriesViewModel by viewModels()
     private lateinit var mView: View
     private val albumsAdapter by lazy { AlbumsAdapter() }
 
@@ -45,7 +43,7 @@ class AlbumsFragment : Fragment() {
         if (albumResponse?.data != null)
             albumsAdapter.setData(albumResponse.data)
         albumsViewModel.offset = 0
-        requestAlbumsByArtistIdPaged(argArtist.artistId, queriesViewModel.blockSize)
+        requestAlbumsByArtistIdPaged(argArtist.artistId)
     }
 
     private fun setUpRecyclerView() {
@@ -58,19 +56,19 @@ class AlbumsFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1) && albumsViewModel.queryArtistId.isNotEmpty()) {
-                    requestAlbumsByArtistIdPaged(albumsViewModel.queryArtistId, queriesViewModel.blockSize)
+                    requestAlbumsByArtistIdPaged(albumsViewModel.queryArtistId)
                 }
             }
         }
         mView.shimmer_albums.addOnScrollListener(scrollListener)
     }
 
-    private fun requestAlbumsByArtistIdPaged(artistId: String, blockSize: Int) {
+    private fun requestAlbumsByArtistIdPaged(artistId: String) {
         showShimmerEffect()
-        albumsViewModel.searchAlbums(queriesViewModel.retrieveSearchArtistWorkQuery(artistId, blockSize, albumsViewModel.offset))
+        albumsViewModel.searchAlbums(QueriesHelper.retrieveSearchArtistWorkQuery(artistId, albumsViewModel.offset))
         albumsViewModel.albumsResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
-                is NetworkResult.Success -> updateData(response, blockSize)
+                is NetworkResult.Success -> updateData(response)
                 is NetworkResult.Error -> showError(response)
                 is NetworkResult.Loading -> showShimmerEffect()
             }
@@ -82,14 +80,14 @@ class AlbumsFragment : Fragment() {
         Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
     }
 
-    private fun updateData(response: NetworkResult<List<Album>>, blockSize: Int) {
+    private fun updateData(response: NetworkResult<List<Album>>) {
         hideShimmerEffect()
         response.data?.let {
             when (albumsViewModel.offset) {
                 0 -> albumsAdapter.setData(it)
                 else -> albumsAdapter.addData(it)
             }
-            this.albumsViewModel.offset += blockSize
+            this.albumsViewModel.offset += it.size
         }
     }
 

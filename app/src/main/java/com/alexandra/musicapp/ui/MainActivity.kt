@@ -21,8 +21,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         navController = findNavController(R.id.fragment_navigation_host)
-        val navBottomFragments = setOf(R.id.fragment_music_catalog, R.id.fragment_favorite_music,
-            R.id.fragment_albums)
+        val navBottomFragments = setOf(
+            R.id.fragment_music_catalog, R.id.fragment_favorite_music
+        )
         val appBarConfiguration = AppBarConfiguration(navBottomFragments)
 
         bottom_navigation.setupWithNavController(navController)
