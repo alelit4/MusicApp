@@ -11,24 +11,18 @@
         android:label="@string/musicapp"
         tools:layout="@layout/fragment_music_catalog" >
         <action
-            android:id="@+id/action_fragment_music_catalog_to_fragment_favorite_music"
-            app:destination="@id/fragment_favorite_music" />
-        <action
             android:id="@+id/action_fragment_music_catalog_to_fragment_albums"
-            app:destination="@id/fragment_albums" />
+            app:destination="@id/fragment_albums"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/fragment_favorite_music"
         android:name="com.alexandra.musicapp.ui.favorites.FavoriteMusicFragment"
         android:label="@string/favorite_music"
-        tools:layout="@layout/fragment_favorite_music" >
-        <action
-            android:id="@+id/action_fragment_favorite_music_to_fragment_music_catalog"
-            app:destination="@id/fragment_music_catalog" />
-        <action
-            android:id="@+id/action_fragment_favorite_music_to_fragment_albums"
-            app:destination="@id/fragment_albums" />
-    </fragment>
+        tools:layout="@layout/fragment_favorite_music" />
     <fragment
         android:id="@+id/fragment_albums"
         android:name="com.alexandra.musicapp.ui.albums.AlbumsFragment"
