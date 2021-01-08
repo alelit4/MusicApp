@@ -25,7 +25,30 @@ class AlbumsBehaviourShould {
 
     @Test
     fun load_albums_of_an_artist() {
+        val searchButton = onView(withId(R.id.search_button))
+        searchButton.perform(click())
 
+        val searchAutoComplete = onView(withId(R.id.search_src_text))
+        searchAutoComplete.perform(replaceText("oreja"), closeSoftKeyboard())
+        val searchAutoComplete2 = onView(withId(R.id.search_src_text))
+        searchAutoComplete2.perform(pressImeActionButton())
+
+        thread {
+            Thread.sleep(4000)
+        }.run()
+
+        val constraintLayoutCatalog = onView(withId(R.id.shimmer_catalog))
+        constraintLayoutCatalog.perform(click())
+
+        thread {
+            Thread.sleep(4000)
+        }.run()
+
+        val constraintLayoutAlbums = onView(withId(R.id.shimmer_albums))
+        constraintLayoutAlbums.perform(click())
+
+        constraintLayoutAlbums.check(ViewAssertions.matches(isDisplayed()))
+        constraintLayoutAlbums.check(RecyclerViewItemCountAssertion(0))
     }
 
 }
