@@ -9,20 +9,22 @@ import javax.inject.Inject
 
 class MusicApiRepository @Inject constructor(
     private val musicApiService: MusicApiService
-) : ArtistsRepository, AlbumsRepository {
+): ArtistsRepository, AlbumsRepository {
 
     override suspend fun searchArtists(searchQuery: Map<String, String>): List<Artist> {
         val response = musicApiService.searchArtists(searchQuery)
         if (response.isSuccessful)
             return response.body()!!.results
+                .map { artistEntity -> artistEntity.asDomainModel() }
         return emptyList()
     }
 
     override suspend fun searchAlbums(searchQuery: Map<String, String>): List<Album> {
         val response = musicApiService.searchAlbums(searchQuery)
         if (response.isSuccessful) {
-            var artistWork = response.body()!!.results
-            return artistWork.filter { it.collectionId != 0 }
+            val artistWork = response.body()!!.results
+            return artistWork.filter { album -> album.collectionId != 0 }
+                .map { albumEntity -> albumEntity.asDomainModel() }
         }
         return emptyList()
     }
