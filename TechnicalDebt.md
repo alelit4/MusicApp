@@ -10,4 +10,6 @@
 * ~~Constants to strings.xml~~
 * ~~To change QueriesViewModel to QueriesHelper~~
 * To change background color effect main view
+* To change background color effect main view
+* Avoid code duplication in pagination request
 
