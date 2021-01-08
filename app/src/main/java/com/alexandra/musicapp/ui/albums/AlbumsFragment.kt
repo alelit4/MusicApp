@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,8 +42,7 @@ class AlbumsFragment : Fragment() {
         if (albumResponse?.data != null)
             albumsAdapter.setData(albumResponse.data)
         albumsViewModel.offset = 0
-        val artist = argArtist.artistIdentification.artistId.toString()
-        requestAlbumsByArtistIdPaged(artist)
+        requestAlbumsByArtistIdPaged(argArtist.artistId)
     }
 
     private fun setUpRecyclerView() {

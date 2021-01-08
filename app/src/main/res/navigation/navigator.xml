@@ -32,13 +32,16 @@
     <fragment
         android:id="@+id/fragment_albums"
         android:name="com.alexandra.musicapp.ui.albums.AlbumsFragment"
-        android:label="fragment_albums"
+        android:label="{artist_name}"
         tools:layout="@layout/fragment_albums" >
         <action
             android:id="@+id/action_fragment_albums_to_fragment_music_catalog"
             app:destination="@id/fragment_music_catalog" />
         <argument
-            android:name="artistIdentification"
-            app:argType="com.alexandra.musicapp.domain.models.Artist$Identification" />
+            android:name="artist_name"
+            app:argType="string" />
+        <argument
+            android:name="artist_id"
+            app:argType="string" />
     </fragment>
 </navigation>
