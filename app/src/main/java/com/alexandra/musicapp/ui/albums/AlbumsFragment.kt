@@ -30,10 +30,8 @@ class AlbumsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         mView = inflater.inflate(R.layout.fragment_albums, container, false)
-
         setUpRecyclerView()
-        setUpScrollListener()
-
+        setUpScrollHandler()
         return mView
     }
 
@@ -51,48 +49,71 @@ class AlbumsFragment : Fragment() {
         mView.shimmer_albums.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun setUpScrollListener() {
-        val scrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+    private val scrollListener: RecyclerView.OnScrollListener =
+        object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && albumsViewModel.queryArtistId.isNotEmpty()) {
+                if (couldLoadData(recyclerView)) {
                     requestAlbumsByArtistIdPaged(albumsViewModel.queryArtistId)
                 }
             }
         }
-        mView.shimmer_albums.addOnScrollListener(scrollListener)
-    }
 
-    private fun requestAlbumsByArtistIdPaged(artistId: String) {
-        showShimmerEffect()
-        albumsViewModel.searchAlbums(QueriesHelper.retrieveSearchArtistWorkQuery(artistId, albumsViewModel.offset))
+    private fun setUpScrollHandler() {
+        mView.shimmer_albums.addOnScrollListener(scrollListener)
         albumsViewModel.albumsResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
-                is NetworkResult.Success -> updateData(response)
-                is NetworkResult.Error -> showError(response)
+                is NetworkResult.Success -> updateView(response)
+                is NetworkResult.Error -> showError(response.message.toString())
                 is NetworkResult.Loading -> showShimmerEffect()
             }
         })
     }
 
-    private fun showError(response: NetworkResult<List<Album>>) {
-        hideShimmerEffect()
-        Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
+    private fun requestAlbumsByArtistIdPaged(artistId: String) {
+        showShimmerEffect()
+        val searchQuery =
+            QueriesHelper.retrieveSearchArtistWorkQuery(artistId, albumsViewModel.offset)
+        albumsViewModel.searchAlbums(searchQuery)
+
     }
 
-    private fun updateData(response: NetworkResult<List<Album>>) {
-        hideShimmerEffect()
-        response.data?.let {
-            when (albumsViewModel.offset) {
-                0 -> albumsAdapter.setData(it)
-                else -> albumsAdapter.addData(it)
-            }
-            this.albumsViewModel.offset += it.size
-        }
+    private fun couldLoadData(recyclerView: RecyclerView): Boolean {
+        return (!recyclerView.canScrollVertically(1)
+                && albumsViewModel.queryArtistId.isNotEmpty()
+                && !albumsViewModel.isLoading
+                && !albumsViewModel.isAllDataDownloaded)
     }
+
+
+    private fun showError(message: String) {
+        hideShimmerEffect()
+        albumsViewModel.isLoading = false
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateView(response: NetworkResult<List<Album>>) {
+        hideShimmerEffect()
+        response.data?.let { data ->
+            if (data.isNotEmpty()) updateAlbums(data)
+        }
+        albumsViewModel.isLoading = false
+    }
+
+    private fun updateAlbums(data: List<Album>) {
+        when (albumsViewModel.offset) {
+            0 -> albumsAdapter.setData(data)
+            else -> albumsAdapter.addData(data)
+        }
+        this.albumsViewModel.isAllDataDownloaded = isAllDataDownloaded(data)
+        this.albumsViewModel.offset += data.size
+    }
+
+    private fun isAllDataDownloaded(data: List<Album>) =
+        (data.size < QueriesHelper.blockSize)
 
     private fun showShimmerEffect() {
-        if (albumsViewModel.offset == 0){
+        if (albumsViewModel.offset == 0) {
             mView.shimmer_albums.showShimmer()
         }
     }

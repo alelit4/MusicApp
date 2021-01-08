@@ -16,6 +16,8 @@ class AlbumsViewModel @ViewModelInject constructor (
     application: Application
 ): AndroidViewModel(application) {
     var offset: Int = 0
+    var isLoading: Boolean = false
+    var isAllDataDownloaded: Boolean = false
     var queryArtistId: String = ""
     var albumsResponse: MutableLiveData<NetworkResult<List<Album>>> = MutableLiveData()
 
@@ -38,7 +40,7 @@ class AlbumsViewModel @ViewModelInject constructor (
         }
     }
 
-    private fun handleArtistsResponse(response: List<Album>): NetworkResult<List<Album>>? {
+    private fun handleArtistsResponse(response: List<Album>): NetworkResult<List<Album>> {
         return when {
             response.isNullOrEmpty() -> {
                 NetworkResult.Error("Artist not found")
