@@ -6,13 +6,12 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexandra.musicapp.R
 import com.alexandra.musicapp.domain.models.Artist
 import com.alexandra.musicapp.domain.utils.NetworkResult
-import com.alexandra.musicapp.ui.QueriesViewModel
+import com.alexandra.musicapp.utils.QueriesHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_music_catalog.view.*
 
@@ -22,7 +21,6 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var mView: View
     private val catalogAdapter by lazy { CatalogAdapter() }
     private val catalogViewModel: CatalogViewModel by activityViewModels()
-    private val queriesViewModel: QueriesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,13 +34,6 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         return mView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val artistResponse = catalogViewModel.artistsResponse.value
-        if (artistResponse?.data != null)
-            catalogAdapter.setData(artistResponse.data)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_music_catalog, menu)
         val search = menu.findItem(R.id.menu_search_artist)
@@ -52,10 +43,11 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(artistName: String?): Boolean {
-        if (artistName != null) {
+        if (artistName != null && !catalogViewModel.isLoading) {
             catalogViewModel.queryArtistName = artistName
             catalogViewModel.offset = 0
-            requestArtistsByNamePaged(artistName, queriesViewModel.blockSize)
+            catalogViewModel.isAllDataDownloaded = false
+            requestArtistsByNamePaged(artistName)
         }
         return true
     }
@@ -76,7 +68,6 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
                 if (couldLoadData(recyclerView)) {
                     requestArtistsByNamePaged(
                         catalogViewModel.queryArtistName,
-                        queriesViewModel.blockSize
                     )
                 }
             }
@@ -88,7 +79,7 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
             { response ->
                 when (response) {
                     is NetworkResult.Success -> updateView(response)
-                    is NetworkResult.Error -> showError(response)
+                    is NetworkResult.Error -> showError(response.message.toString())
                     is NetworkResult.Loading -> showShimmerEffect()
                 }
             })
@@ -103,23 +94,26 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun couldLoadData(recyclerView: RecyclerView): Boolean {
-        return !recyclerView.canScrollVertically(1)
+        return (!recyclerView.canScrollVertically(1)
                 && catalogViewModel.queryArtistName.isNotEmpty()
                 && !catalogViewModel.isLoading
+                && !catalogViewModel.isAllDataDownloaded)
     }
 
-    private fun requestArtistsByNamePaged(artistName: String, blockSize: Int) {
+    private fun requestArtistsByNamePaged(artistName: String) {
         showShimmerEffect()
         catalogViewModel.isLoading = true
-        val searchQuery = queriesViewModel.retrieveSearchArtistsQuery(
-            artistName, blockSize, catalogViewModel.offset)
+        val searchQuery = QueriesHelper.retrieveSearchArtistsQuery(
+            artistName, catalogViewModel.offset
+        )
         catalogViewModel.searchArtists(searchQuery)
     }
 
-    private fun showError(response: NetworkResult<List<Artist>>) {
+    private fun showError(message: String) {
         hideShimmerEffect()
+        showAppLogo(true)
         catalogViewModel.isLoading = false
-        Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun updateView(response: NetworkResult<List<Artist>>) {
@@ -135,8 +129,12 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
             0 -> catalogAdapter.setData(data)
             else -> catalogAdapter.addData(data)
         }
+        this.catalogViewModel.isAllDataDownloaded = isAllDataDownloaded(data)
         this.catalogViewModel.offset += data.size
     }
+
+    private fun isAllDataDownloaded(data: List<Artist>) =
+        (data.size < QueriesHelper.blockSize)
 
     private fun showShimmerEffect() {
         if (catalogViewModel.offset == 0) {

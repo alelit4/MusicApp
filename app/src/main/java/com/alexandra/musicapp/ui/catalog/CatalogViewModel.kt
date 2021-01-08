@@ -17,6 +17,7 @@ class CatalogViewModel @ViewModelInject constructor (
 ): AndroidViewModel(application) {
     var offset: Int = 0
     var isLoading: Boolean = false
+    var isAllDataDownloaded: Boolean = false
     var queryArtistName: String = ""
     var artistsResponse: MutableLiveData<NetworkResult<List<Artist>>> = MutableLiveData()
 
