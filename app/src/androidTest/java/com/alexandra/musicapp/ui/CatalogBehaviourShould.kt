@@ -1,10 +1,6 @@
 package com.alexandra.musicapp.ui
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.NoMatchingViewException
-import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -12,8 +8,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.alexandra.musicapp.R
-import org.hamcrest.Matcher
-import org.hamcrest.Matchers.not
+import com.alexandra.musicapp.RecyclerViewItemCountAssertion
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -55,15 +50,3 @@ class CatalogBehaviourShould {
     }
 }
 
-class RecyclerViewItemCountAssertion(expectedCount: Int) : ViewAssertion {
-    private val matcher: Matcher<Int?>? = not(expectedCount)
-
-    override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
-        if (noViewFoundException != null) {
-            throw noViewFoundException
-        }
-        val recyclerView = view as RecyclerView?
-        val adapter = recyclerView!!.adapter!!
-        assertThat(adapter.itemCount, matcher)
-    }
-}
