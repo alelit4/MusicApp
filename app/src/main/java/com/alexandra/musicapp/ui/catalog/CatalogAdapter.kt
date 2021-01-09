@@ -55,15 +55,18 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
     fun setData(catalog: List<Artist>){
         val artistsDiffUtil = CustomDiffUtils(this.artists, catalog)
         val diffUtilResult = DiffUtil.calculateDiff(artistsDiffUtil)
+        this.artists.clear()
         this.artists = catalog as MutableList<Artist>
         diffUtilResult.dispatchUpdatesTo(this)
         catalogSize.value = itemCount
     }
 
     fun addData(catalog: List<Artist>) {
-        val oldSize = this.artists.size
+        val oldList = this.artists
+        this.artists.clear()
+        this.artists.addAll(oldList)
         this.artists.addAll(catalog)
-        notifyItemInserted(oldSize)
+        notifyItemInserted(oldList.size)
         catalogSize.value = itemCount
     }
 
