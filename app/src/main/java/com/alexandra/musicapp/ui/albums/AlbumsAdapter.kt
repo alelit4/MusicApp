@@ -3,18 +3,23 @@ package com.alexandra.musicapp.ui.albums
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.alexandra.musicapp.R
 import com.alexandra.musicapp.databinding.RowLayoutAlbumBinding
 import com.alexandra.musicapp.domain.models.Album
 import com.alexandra.musicapp.ui.CustomDiffUtils
+import com.alexandra.musicapp.ui.catalog.MusicCatalogFragmentDirections
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.row_layout_artist.view.*
 
 class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>() {
 
-    private var albums =  mutableListOf<Album>()
+    private var albums = mutableListOf<Album>()
 
     class AlbumViewHolder(private val binding: RowLayoutAlbumBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(album: Album) {
             binding.album = album
@@ -38,7 +43,11 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>() {
         val currentAlbum = albums[position]
         holder.bind(currentAlbum)
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context, "Hello", Toast.LENGTH_LONG).show()
+            val action = AlbumsFragmentDirections.actionFragmentAlbumsToFragmentSongs(
+                currentAlbum.collectionName,
+                currentAlbum.collectionId.toString()
+            )
+            holder.itemView.findNavController().navigate(action)
         }
     }
 

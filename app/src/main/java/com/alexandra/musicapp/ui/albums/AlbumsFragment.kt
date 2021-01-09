@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_albums.view.*
 @AndroidEntryPoint
 class AlbumsFragment : Fragment() {
 
-    private val argArtist by navArgs<AlbumsFragmentArgs>()
+    private val arguments by navArgs<AlbumsFragmentArgs>()
     private val albumsViewModel: AlbumsViewModel by activityViewModels()
     private lateinit var mView: View
     private val albumsAdapter by lazy { AlbumsAdapter() }
@@ -42,7 +41,7 @@ class AlbumsFragment : Fragment() {
         if (albumResponse?.data != null)
             albumsAdapter.setData(albumResponse.data)
         albumsViewModel.offset = 0
-        requestAlbumsByArtistIdPaged(argArtist.artistId)
+        requestAlbumsByArtistIdPaged(arguments.artistId)
     }
 
     private fun setUpRecyclerView() {
