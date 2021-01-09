@@ -1,10 +1,7 @@
 package com.alexandra.musicapp
 
 import com.alexandra.musicapp.data.api.MusicApiService
-import com.alexandra.musicapp.data.entities.AlbumEntity
-import com.alexandra.musicapp.data.entities.AlbumsResult
-import com.alexandra.musicapp.data.entities.ArtistEntity
-import com.alexandra.musicapp.data.entities.ArtistsResult
+import com.alexandra.musicapp.data.entities.*
 import com.alexandra.musicapp.data.repository.MusicApiRepository
 import com.alexandra.musicapp.utils.QueriesHelper
 import kotlinx.coroutines.runBlocking
@@ -44,7 +41,7 @@ class MusicApiRepositoryShould {
         val fakeArtistId = 1
         val fakeAlbumsResult = createFakeAlbumsResult(fakeArtistId)
         val fakeNetworkResult = createFakeNetworkResult(fakeAlbumsResult)
-        val fakeSearchQuery =  QueriesHelper.retrieveSearchArtistWorkQuery(
+        val fakeSearchQuery = QueriesHelper.retrieveSearchArtistWorkQuery(
             fakeArtistId.toString(), 1
         )
         `when`(musicApiService.searchAlbums(fakeSearchQuery))
@@ -56,8 +53,24 @@ class MusicApiRepositoryShould {
         Assert.assertEquals(fakeAlbumsResult.asDomainModel(), response)
     }
 
-    private fun createFakeNetworkResult(fakeArtistResult: ArtistsResult) =
-        Response.success(fakeArtistResult)
+    @Test
+    fun search_songs_by_albumId() = runBlocking {
+        val fakeAlbumId = 1
+        val fakeSongsResult = createFakeSongsResult(fakeAlbumId)
+        val fakeNetworkResult = createFakeNetworkResult(fakeSongsResult)
+        val fakeSearchQuery = QueriesHelper.retrieveSearchSongsQuery(
+            fakeAlbumId.toString(), 1
+        )
+        `when`(musicApiService.searchSongs(fakeSearchQuery))
+            .thenReturn(fakeNetworkResult)
+
+        val repository = MusicApiRepository(musicApiService)
+        val response = repository.searchSongs(fakeSearchQuery)
+
+        Assert.assertEquals(fakeSongsResult.asDomainModel(), response)
+    }
+
+
 
     private fun createFakeArtistsResult(fakeArtistName: String): ArtistsResult {
         val fakeArtistEntity = ArtistEntity(1, 1, fakeArtistName, "anArtistType", "aGenreName")
@@ -71,10 +84,25 @@ class MusicApiRepositoryShould {
         val otherFakeAlbum =
             AlbumEntity(fakeArtistId, 2, "aCollectionName", "anImageUrl", "aReleaseDate")
         val fakeAlbumList = listOf(aFakeAlbum, otherFakeAlbum)
-        val fakeArtistWork = AlbumsResult(fakeAlbumList.size, fakeAlbumList)
-        return fakeArtistWork
+        return AlbumsResult(fakeAlbumList.size, fakeAlbumList)
+    }
+
+    private fun createFakeSongsResult(fakeAlbumId: Int): SongsResult {
+        val fakeSongEntity =
+            SongEntity(1, "aTrackName", 1, fakeAlbumId, "aImageUrl", true, "aPreviewUrl")
+        val fakeSongsEntityList = listOf(fakeSongEntity)
+        return SongsResult(fakeSongsEntityList.size, fakeSongsEntityList)
     }
 
     private fun createFakeNetworkResult(fakeArtistWork: AlbumsResult) =
         Response.success(fakeArtistWork)
+
+    private fun createFakeNetworkResult(fakeArtistResult: ArtistsResult) =
+        Response.success(fakeArtistResult)
+
+
+    private fun createFakeNetworkResult(fakeSongsResult: SongsResult) =
+        Response.success(fakeSongsResult)
+
+
 }
