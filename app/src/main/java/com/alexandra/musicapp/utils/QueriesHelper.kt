@@ -15,6 +15,7 @@ class QueriesHelper {
         private const val ALL_ARTIST = "allArtist"
         private const val ALL_ARTIST_TERM = "allArtistTerm"
         private const val ALBUM = "album"
+        private const val SONG = "song"
 
         fun retrieveSearchArtistsQuery(artistName: String): HashMap<String, String> {
             val query: HashMap<String, String> = HashMap()
@@ -49,6 +50,17 @@ class QueriesHelper {
             val query: HashMap<String, String> = HashMap()
             query[QUERY_ID] = artistId
             query[QUERY_ENTITY] = ALBUM
+            query[LIMIT] = blockSize.toString()
+            query[OFFSET] = offset.toString()
+            return query
+        }
+
+        fun retrieveSearchSongsQuery(
+            collectionId: String, offset: Int
+        ): HashMap<String, String> {
+            val query: HashMap<String, String> = HashMap()
+            query[QUERY_ID] = collectionId
+            query[QUERY_ENTITY] = SONG
             query[LIMIT] = blockSize.toString()
             query[OFFSET] = offset.toString()
             return query
