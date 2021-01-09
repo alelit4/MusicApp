@@ -2,12 +2,15 @@ package com.alexandra.musicapp.ui.songs
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.alexandra.musicapp.databinding.RowLayoutSongBinding
+import com.alexandra.musicapp.domain.models.Artist
 import com.alexandra.musicapp.domain.models.Song
+import com.alexandra.musicapp.ui.CustomDiffUtils
 
 class SongsAdapter(
-    private val songs: List<Song>
+    var songs: List<Song>
 ) : RecyclerView.Adapter<SongsAdapter.SongsViewHolder>() {
 
     class SongsViewHolder(private val binding: RowLayoutSongBinding) :
@@ -35,6 +38,13 @@ class SongsAdapter(
     override fun onBindViewHolder(holder: SongsViewHolder, position: Int) {
         val currentResult = songs[position]
         holder.bind(currentResult)
+    }
+
+    fun setData(catalog: List<Song>){
+        val songsDiffUtil = CustomDiffUtils(this.songs, catalog)
+        val diffUtilResult = DiffUtil.calculateDiff(songsDiffUtil)
+        this.songs = catalog as MutableList<Song>
+        diffUtilResult.dispatchUpdatesTo(this)
     }
 
 }
