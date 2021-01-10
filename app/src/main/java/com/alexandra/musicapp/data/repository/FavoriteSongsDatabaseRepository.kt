@@ -7,13 +7,14 @@ import com.alexandra.musicapp.data.db.SongsDao
 import com.alexandra.musicapp.data.entities.asDomainModel
 import com.alexandra.musicapp.domain.models.Song
 import com.alexandra.musicapp.domain.models.asEntity
+import com.alexandra.musicapp.domain.repositories.FavoriteSongsRepository
 import javax.inject.Inject
 
-class FavoriteSongsRepository @Inject constructor(
+class FavoriteSongsDatabaseRepository @Inject constructor(
     private val songsDao: SongsDao
-) {
+) : FavoriteSongsRepository {
 
-    fun getAllFavoriteSongs(): LiveData<List<Song>> {
+    override fun getAllFavoriteSongs(): LiveData<List<Song>> {
         return songsDao.getAll().map { value ->
             value.asDomainModel()
         }
@@ -21,13 +22,12 @@ class FavoriteSongsRepository @Inject constructor(
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun insert(song: Song) {
+    override suspend fun insert(song: Song) {
         songsDao.insert(song.asEntity())
     }
 
-    suspend fun delete(song: Song) {
+    override suspend fun delete(song: Song) {
         songsDao.delete(song.asEntity())
     }
-
 }
 
