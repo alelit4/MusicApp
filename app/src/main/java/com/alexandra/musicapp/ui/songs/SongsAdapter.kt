@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.alexandra.musicapp.data.mediaplayer.CustomMediaPlayer
 import com.alexandra.musicapp.databinding.RowLayoutSongBinding
-import com.alexandra.musicapp.domain.models.Artist
 import com.alexandra.musicapp.domain.models.Song
 import com.alexandra.musicapp.ui.CustomDiffUtils
+import kotlinx.android.synthetic.main.row_layout_song.view.*
 
 class SongsAdapter(
     var songs: List<Song>
@@ -38,6 +39,9 @@ class SongsAdapter(
     override fun onBindViewHolder(holder: SongsViewHolder, position: Int) {
         val currentResult = songs[position]
         holder.bind(currentResult)
+        holder.itemView.icon_play.setOnClickListener {
+             CustomMediaPlayer.play(holder.itemView.context, currentResult.previewUrl)
+        }
     }
 
     fun setData(catalog: List<Song>){

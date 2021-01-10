@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alexandra.musicapp.R
+import com.alexandra.musicapp.data.mediaplayer.CustomMediaPlayer
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_songs.view.*
@@ -49,6 +50,14 @@ class SongsFragment : Fragment() {
         songsViewModel.requestSongsByCollectionIdPaged(arguments.collectionId)
     }
 
+    override fun onPause() {
+        super.onPause()
+        CustomMediaPlayer.stop()
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        CustomMediaPlayer.stop()
+    }
 }
 
