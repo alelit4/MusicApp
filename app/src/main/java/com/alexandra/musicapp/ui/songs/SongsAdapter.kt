@@ -1,10 +1,13 @@
 package com.alexandra.musicapp.ui.songs
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.alexandra.musicapp.data.mediaplayer.CustomMediaPlayer
+import com.alexandra.musicapp.data.mediaplayer.ShareHandler
 import com.alexandra.musicapp.databinding.RowLayoutSongBinding
 import com.alexandra.musicapp.domain.models.Song
 import com.alexandra.musicapp.ui.CustomDiffUtils
@@ -40,15 +43,17 @@ class SongsAdapter(
         val currentResult = songs[position]
         holder.bind(currentResult)
         holder.itemView.icon_play.setOnClickListener {
-             CustomMediaPlayer.play(holder.itemView.context, currentResult.previewUrl)
+            CustomMediaPlayer.play(holder.itemView.context, currentResult.previewUrl)
+        }
+        holder.itemView.icon_share.setOnClickListener {
+            ShareHandler.shareSong(currentResult.trackName, holder.itemView.context)
         }
     }
 
-    fun setData(catalog: List<Song>){
+    fun setData(catalog: List<Song>) {
         val songsDiffUtil = CustomDiffUtils(this.songs, catalog)
         val diffUtilResult = DiffUtil.calculateDiff(songsDiffUtil)
         this.songs = catalog as MutableList<Song>
         diffUtilResult.dispatchUpdatesTo(this)
     }
-
 }

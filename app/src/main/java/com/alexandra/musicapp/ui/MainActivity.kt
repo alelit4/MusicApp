@@ -1,6 +1,8 @@
 package com.alexandra.musicapp.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -11,6 +13,7 @@ import com.alexandra.musicapp.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +23,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupNavController()
+        setupInformationShare()
+    }
+
+    private fun setupNavController() {
         navController = findNavController(R.id.fragment_navigation_host)
         val navBottomFragments = setOf(
             R.id.fragment_music_catalog, R.id.fragment_favorite_music
@@ -33,4 +41,17 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
+    private fun setupInformationShare() {
+        when (intent?.action) {
+            Intent.ACTION_SEND ->  handleSendText(intent)
+        }
+    }
+
+    private fun handleSendText(intent: Intent) {
+        intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
+            Toast.makeText(this, "Someone love -> $it", Toast.LENGTH_LONG).show()
+        }
+    }
+
 }
