@@ -1,8 +1,11 @@
 package com.alexandra.musicapp.ui.catalog
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,13 +47,19 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(artistName: String?): Boolean {
         if (artistName != null && !catalogViewModel.isLoading) {
-            Snackbar.make(mView, getString(R.string.Loading), Snackbar.LENGTH_SHORT).show()
             catalogViewModel.queryArtistName = artistName
             catalogViewModel.offset = 0
             catalogViewModel.isAllDataDownloaded = false
             requestArtistsByNamePaged(artistName)
+            hideKeyBoard()
         }
         return true
+    }
+
+    private fun hideKeyBoard() {
+        val inputManager =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputManager?.hideSoftInputFromWindow(mView.windowToken, 0)
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
