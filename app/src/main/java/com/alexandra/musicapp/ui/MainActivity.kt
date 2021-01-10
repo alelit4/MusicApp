@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.alexandra.musicapp.R
+import com.alexandra.musicapp.data.mediaplayer.ShareHandler.actionSend
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -44,14 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupInformationShare() {
         when (intent?.action) {
-            Intent.ACTION_SEND ->  handleSendText(intent)
+            Intent.ACTION_SEND ->  actionSend(intent, this)
         }
     }
-
-    private fun handleSendText(intent: Intent) {
-        intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
-            Toast.makeText(this, "Someone love -> $it", Toast.LENGTH_LONG).show()
-        }
-    }
-
 }
