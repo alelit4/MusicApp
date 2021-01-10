@@ -1,7 +1,7 @@
 package com.alexandra.musicapp.di
 
 import android.content.Context
-import com.alexandra.musicapp.data.Connectivity.Companion.hasInternetConnection
+import com.alexandra.musicapp.data.ConnectivityHandler.Companion.hasInternetConnection
 import com.alexandra.musicapp.data.api.MusicApiService
 import com.alexandra.musicapp.data.db.MusicAppDatabase
 import com.alexandra.musicapp.data.repository.FavoriteSongsDatabaseRepository

@@ -4,24 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alexandra.musicapp.R
-import com.alexandra.musicapp.data.mediaplayer.CustomMediaPlayer
+import com.alexandra.musicapp.data.mediaplayer.MediaPlayer
 import com.alexandra.musicapp.domain.models.Song
 import com.alexandra.musicapp.domain.utils.NetworkResult
 import com.alexandra.musicapp.ui.favorites.FavoriteSongsViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
-import kotlinx.android.synthetic.main.fragment_favorite_music.*
-import kotlinx.android.synthetic.main.fragment_favorite_music.view.*
-import kotlinx.android.synthetic.main.fragment_music_catalog.view.*
-import kotlinx.android.synthetic.main.fragment_music_catalog.view.app_logo
 import kotlinx.android.synthetic.main.fragment_songs.view.*
 import kotlinx.android.synthetic.main.row_layout_song.view.*
 
@@ -73,12 +68,12 @@ class SongsFragment : Fragment(), SongsAdapter.AddFavoriteSong,
 
     override fun onPause() {
         super.onPause()
-        CustomMediaPlayer.stop()
+        MediaPlayer.stop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        CustomMediaPlayer.stop()
+        MediaPlayer.stop()
     }
 
     override fun onClick(song: Song) {

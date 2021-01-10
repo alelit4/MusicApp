@@ -5,7 +5,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.alexandra.musicapp.data.Connectivity.Companion.hasInternetConnection
 import com.alexandra.musicapp.di.NetworkModule
 import com.alexandra.musicapp.domain.models.Artist
 import com.alexandra.musicapp.domain.repositories.ArtistsRepository

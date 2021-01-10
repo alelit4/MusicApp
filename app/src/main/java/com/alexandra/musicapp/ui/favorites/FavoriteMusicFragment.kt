@@ -1,17 +1,15 @@
 package com.alexandra.musicapp.ui.favorites
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alexandra.musicapp.R
-import com.alexandra.musicapp.data.mediaplayer.CustomMediaPlayer
+import com.alexandra.musicapp.data.mediaplayer.MediaPlayer
 import com.alexandra.musicapp.domain.models.Song
 import com.alexandra.musicapp.ui.songs.SongsAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,11 +80,11 @@ class FavoriteMusicFragment : Fragment(), SongsAdapter.AddFavoriteSong,
 
     override fun onPause() {
         super.onPause()
-        CustomMediaPlayer.stop()
+        MediaPlayer.stop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        CustomMediaPlayer.stop()
+        MediaPlayer.stop()
     }
 }

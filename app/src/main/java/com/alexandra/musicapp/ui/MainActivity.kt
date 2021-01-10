@@ -9,7 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.alexandra.musicapp.R
-import com.alexandra.musicapp.data.mediaplayer.ShareHandler.songReceived
+import com.alexandra.musicapp.data.ShareHandler.songReceived
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 

@@ -5,7 +5,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 
-object CustomMediaPlayer {
+object MediaPlayer {
     private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     fun play(context: Context, songUrl: String) {

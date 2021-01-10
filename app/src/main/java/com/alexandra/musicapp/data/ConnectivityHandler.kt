@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 
-class Connectivity {
+class ConnectivityHandler {
     companion object {
         fun hasInternetConnection(context: Context): Boolean {
             val connectivityManager = context.getSystemService(

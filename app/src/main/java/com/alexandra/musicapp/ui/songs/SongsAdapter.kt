@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.alexandra.musicapp.data.mediaplayer.CustomMediaPlayer
-import com.alexandra.musicapp.data.mediaplayer.ShareHandler
+import com.alexandra.musicapp.data.mediaplayer.MediaPlayer
+import com.alexandra.musicapp.data.ShareHandler
 import com.alexandra.musicapp.databinding.RowLayoutSongBinding
 import com.alexandra.musicapp.domain.models.Song
 import com.alexandra.musicapp.ui.CustomDiffUtils
@@ -45,7 +45,7 @@ class SongsAdapter(
         holder.bind(currentSong)
         fillFavoriteSongsButton.fillButtonIfFavorite(currentSong, holder.itemView.icon_fav_empty)
         holder.itemView.icon_play.setOnClickListener {
-            CustomMediaPlayer.play(holder.itemView.context, currentSong.previewUrl)
+            MediaPlayer.play(holder.itemView.context, currentSong.previewUrl)
         }
         holder.itemView.icon_share.setOnClickListener {
             ShareHandler.shareSong(currentSong.trackName, holder.itemView.context)

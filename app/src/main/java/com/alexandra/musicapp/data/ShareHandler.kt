@@ -1,4 +1,4 @@
-package com.alexandra.musicapp.data.mediaplayer
+package com.alexandra.musicapp.data
 
 import android.content.Context
 import android.content.Intent
