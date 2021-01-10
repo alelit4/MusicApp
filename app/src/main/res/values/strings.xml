@@ -7,4 +7,5 @@
     <string name="catalog">Catalog</string>
     <string name="search">Search an artist</string>
     <string name="no_favorite_music">No favorite music</string>
+    <string name="Loading">Loading...</string>
 </resources>

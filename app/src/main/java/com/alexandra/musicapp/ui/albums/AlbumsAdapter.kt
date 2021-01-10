@@ -2,17 +2,12 @@ package com.alexandra.musicapp.ui.albums
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.alexandra.musicapp.R
 import com.alexandra.musicapp.databinding.RowLayoutAlbumBinding
 import com.alexandra.musicapp.domain.models.Album
 import com.alexandra.musicapp.ui.CustomDiffUtils
-import com.alexandra.musicapp.ui.catalog.MusicCatalogFragmentDirections
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.row_layout_artist.view.*
 
 class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>() {
 

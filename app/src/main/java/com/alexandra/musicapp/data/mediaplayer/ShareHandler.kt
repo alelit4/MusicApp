@@ -15,7 +15,7 @@ object ShareHandler {
         context.startActivity(chooser)
     }
 
-    fun actionSend(intent: Intent, context: Context) {
+    fun songReceived(intent: Intent, context: Context) {
         intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
             Toast.makeText(context, "Someone love -> $it", Toast.LENGTH_LONG).show()
         }

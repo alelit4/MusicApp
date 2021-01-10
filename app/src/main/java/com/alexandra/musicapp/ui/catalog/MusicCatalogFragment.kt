@@ -2,7 +2,6 @@ package com.alexandra.musicapp.ui.catalog
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -12,6 +11,7 @@ import com.alexandra.musicapp.R
 import com.alexandra.musicapp.domain.models.Artist
 import com.alexandra.musicapp.domain.utils.NetworkResult
 import com.alexandra.musicapp.utils.QueriesHelper
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_music_catalog.view.*
 
@@ -44,6 +44,7 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(artistName: String?): Boolean {
         if (artistName != null && !catalogViewModel.isLoading) {
+            Snackbar.make(mView, getString(R.string.Loading), Snackbar.LENGTH_SHORT).show()
             catalogViewModel.queryArtistName = artistName
             catalogViewModel.offset = 0
             catalogViewModel.isAllDataDownloaded = false
@@ -113,7 +114,7 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
         hideShimmerEffect()
         showAppLogo(true)
         catalogViewModel.isLoading = false
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Snackbar.make(mView, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun updateView(response: NetworkResult<List<Artist>>) {

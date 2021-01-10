@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
@@ -14,6 +13,7 @@ import com.alexandra.musicapp.R
 import com.alexandra.musicapp.domain.models.Album
 import com.alexandra.musicapp.domain.utils.NetworkResult
 import com.alexandra.musicapp.utils.QueriesHelper
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_albums.view.*
 
@@ -89,7 +89,7 @@ class AlbumsFragment : Fragment() {
     private fun showError(message: String) {
         hideShimmerEffect()
         albumsViewModel.isLoading = false
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Snackbar.make(mView, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun updateView(response: NetworkResult<List<Album>>) {
