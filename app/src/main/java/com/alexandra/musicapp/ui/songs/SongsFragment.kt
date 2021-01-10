@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alexandra.musicapp.R
 import com.alexandra.musicapp.data.mediaplayer.CustomMediaPlayer
 import com.alexandra.musicapp.domain.models.Song
+import com.alexandra.musicapp.domain.utils.NetworkResult
 import com.alexandra.musicapp.ui.favorites.FavoriteSongsViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_favorite_music.*
@@ -59,6 +61,14 @@ class SongsFragment : Fragment(), SongsAdapter.AddFavoriteSong,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         songsViewModel.requestSongsByCollectionIdPaged(arguments.collectionId)
+        songsViewModel.songsResponse.observe(viewLifecycleOwner,
+            { response ->
+                if (response is NetworkResult.Error) showError(response.message.toString())
+            })
+    }
+
+    private fun showError(message: String) {
+        Snackbar.make(mView, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onPause() {
@@ -81,7 +91,7 @@ class SongsFragment : Fragment(), SongsAdapter.AddFavoriteSong,
     }
 
     override fun fillButtonIfFavorite(currentSong: Song, button: View) {
-        if(favoriteSongsViewModel.allFavoritesSongs.value?.contains(currentSong) == true){
+        if (favoriteSongsViewModel.allFavoritesSongs.value?.contains(currentSong) == true) {
             fillButton(button)
         }
     }

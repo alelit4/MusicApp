@@ -1,6 +1,7 @@
 package com.alexandra.musicapp.di
 
 import android.content.Context
+import com.alexandra.musicapp.data.Connectivity.Companion.hasInternetConnection
 import com.alexandra.musicapp.data.api.MusicApiService
 import com.alexandra.musicapp.data.db.MusicAppDatabase
 import com.alexandra.musicapp.data.repository.FavoriteSongsRepository
@@ -14,6 +15,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,8 +32,30 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().readTimeout(5, TimeUnit.SECONDS)
+    fun provideCache(@ApplicationContext applicationContext: Context): Cache {
+        val cacheSize = (5 * 1024 * 1024).toLong()
+        return Cache(applicationContext.cacheDir, cacheSize)
+    }
+
+    @Singleton
+    @Provides
+    fun provideHttpClient(@ApplicationContext applicationContext: Context, myCache: Cache): OkHttpClient {
+        return OkHttpClient.Builder()
+            .cache(myCache)
+            .addInterceptor { chain ->
+                var request = chain.request()
+                request = if (hasInternetConnection(applicationContext))
+                    request.newBuilder()
+                        .header("Cache-Control", "public, max-age=" + 5).build()
+                else
+                    request
+                        .newBuilder()
+                        .header("Cache-Control",
+                        "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7)
+                        .build()
+                chain.proceed(request)
+            }
+            .readTimeout(5, TimeUnit.SECONDS)
             .connectTimeout(5, TimeUnit.SECONDS)
             .build()
     }
@@ -44,8 +68,9 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitIntance(okHttpClient: OkHttpClient,
-                               gsonConverterFactory: GsonConverterFactory
+    fun provideRetrofitIntance(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder().baseUrl(BASE_URL).client(okHttpClient)
             .addConverterFactory(gsonConverterFactory).build()
@@ -93,7 +118,6 @@ class NetworkModule {
     fun provideFavoriteSongsRepository(songsDao: SongsDao): FavoriteSongsRepository {
         return FavoriteSongsRepository(songsDao)
     }
-
 
 
 }

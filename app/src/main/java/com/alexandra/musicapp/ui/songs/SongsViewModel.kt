@@ -6,7 +6,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DiffUtil
-import com.alexandra.musicapp.data.Connectivity.Companion.hasInternetConnection
 import com.alexandra.musicapp.domain.models.Song
 import com.alexandra.musicapp.domain.repositories.SongsRepository
 import com.alexandra.musicapp.domain.utils.NetworkResult
@@ -31,26 +30,22 @@ class SongsViewModel @ViewModelInject constructor(
 
     private suspend fun searchSongsSafeCall(queries: Map<String, String>) {
         songsResponse.value = NetworkResult.Loading()
-        if (hasInternetConnection(getApplication<Application>())) {
-            try {
-                val response = repository.searchSongs(queries)
-                songsResponse.value = handleSongsResponse(response)
-            } catch (e: Exception) {
-                songsResponse.value = NetworkResult.Error("Song not found")
-            }
-        } else {
-            songsResponse.value = NetworkResult.Error("No Internet connection")
+        try {
+            val response = repository.searchSongs(queries)
+            songsResponse.value = handleSongsResponse(response)
+        } catch (e: Exception) {
+            songsResponse.value = NetworkResult.Error("Song not found")
         }
     }
 
     private fun handleSongsResponse(response: List<Song>): NetworkResult<List<Song>> {
-         when {
+        return when {
             response.isNullOrEmpty() -> {
-                return NetworkResult.Error("Song not found")
+                NetworkResult.Error("No data available. Check your Internet Connection")
             }
             else -> {
                 setData(response)
-                return NetworkResult.Success(response)
+                NetworkResult.Success(response)
             }
         }
     }
