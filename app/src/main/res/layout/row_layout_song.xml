@@ -74,7 +74,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/icon_play" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/icon_fav_emty"
+                    android:id="@+id/icon_fav_empty"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -85,7 +85,7 @@
                     app:tint="@color/white"
                     app:layout_constraintStart_toStartOf="@+id/song_trackname"
                     app:layout_constraintTop_toBottomOf="@+id/song_trackname"
-                    app:srcCompat="@drawable/ic_emty_fav"/>
+                    app:srcCompat="@drawable/ic_empty_fav"/>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/icon_share"
@@ -96,9 +96,9 @@
                     android:backgroundTint="@color/white"
                     app:backgroundTint="@color/light_gray"
                     app:fabSize="mini"
-                    app:layout_constraintBottom_toBottomOf="@+id/icon_fav_emty"
+                    app:layout_constraintBottom_toBottomOf="@+id/icon_fav_empty"
                     app:layout_constraintEnd_toEndOf="@+id/song_trackname"
-                    app:layout_constraintTop_toTopOf="@+id/icon_fav_emty"
+                    app:layout_constraintTop_toTopOf="@+id/icon_fav_empty"
                     app:srcCompat="@drawable/ic_share"
                     app:tint="@color/gray" />
 

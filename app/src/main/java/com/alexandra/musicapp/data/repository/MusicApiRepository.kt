@@ -1,6 +1,7 @@
 package com.alexandra.musicapp.data.repository
 
 import com.alexandra.musicapp.data.api.MusicApiService
+import com.alexandra.musicapp.data.entities.asDomainModel
 import com.alexandra.musicapp.domain.models.Album
 import com.alexandra.musicapp.domain.models.Artist
 import com.alexandra.musicapp.domain.models.Song

@@ -1,7 +1,11 @@
 package com.alexandra.musicapp.di
 
+import android.content.Context
 import com.alexandra.musicapp.data.api.MusicApiService
+import com.alexandra.musicapp.data.db.MusicAppDatabase
+import com.alexandra.musicapp.data.repository.FavoriteSongsRepository
 import com.alexandra.musicapp.data.repository.MusicApiRepository
+import com.alexandra.musicapp.data.db.SongsDao
 import com.alexandra.musicapp.domain.repositories.AlbumsRepository
 import com.alexandra.musicapp.domain.repositories.ArtistsRepository
 import com.alexandra.musicapp.domain.repositories.SongsRepository
@@ -9,6 +13,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -69,4 +74,26 @@ class NetworkModule {
     fun provideSongsRepository(musicApiService: MusicApiService): SongsRepository {
         return MusicApiRepository(musicApiService)
     }
+
+    @Singleton
+    @Provides
+    fun provideMusicAppDatabase(@ApplicationContext application: Context): MusicAppDatabase {
+        return MusicAppDatabase.getDatabase(application)
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideSongsDao(database: MusicAppDatabase): SongsDao {
+        return database.songsDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFavoriteSongsRepository(songsDao: SongsDao): FavoriteSongsRepository {
+        return FavoriteSongsRepository(songsDao)
+    }
+
+
+
 }

@@ -1,6 +1,7 @@
 package com.alexandra.musicapp.ui.songs
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,9 @@ import com.alexandra.musicapp.ui.CustomDiffUtils
 import kotlinx.android.synthetic.main.row_layout_song.view.*
 
 class SongsAdapter(
-    var songs: List<Song>
+    var songs: List<Song>,
+    private val addFavoriteSong: AddFavoriteSong,
+    private val fillFavoriteSongsButton: FillFavoriteSongsButton
 ) : RecyclerView.Adapter<SongsAdapter.SongsViewHolder>() {
 
     class SongsViewHolder(private val binding: RowLayoutSongBinding) :
@@ -38,14 +41,28 @@ class SongsAdapter(
     }
 
     override fun onBindViewHolder(holder: SongsViewHolder, position: Int) {
-        val currentResult = songs[position]
-        holder.bind(currentResult)
+        val currentSong = songs[position]
+        holder.bind(currentSong)
+        fillFavoriteSongsButton.fillButtonIfFavorite(currentSong, holder.itemView.icon_fav_empty)
         holder.itemView.icon_play.setOnClickListener {
-            CustomMediaPlayer.play(holder.itemView.context, currentResult.previewUrl)
+            CustomMediaPlayer.play(holder.itemView.context, currentSong.previewUrl)
         }
         holder.itemView.icon_share.setOnClickListener {
-            ShareHandler.shareSong(currentResult.trackName, holder.itemView.context)
+            ShareHandler.shareSong(currentSong.trackName, holder.itemView.context)
         }
+        holder.itemView.icon_fav_empty.setOnClickListener{
+            addFavoriteSong.onClick(currentSong)
+            fillFavoriteSongsButton.fillButton(holder.itemView.icon_fav_empty)
+        }
+    }
+
+    interface AddFavoriteSong {
+        fun onClick(song: Song)
+    }
+
+    interface FillFavoriteSongsButton {
+        fun fillButton(button: View)
+        fun fillButtonIfFavorite(currentSong: Song, button: View)
     }
 
     fun setData(catalog: List<Song>) {
