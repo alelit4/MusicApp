@@ -4,8 +4,8 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
-import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.alexandra.musicapp.R
 import com.alexandra.musicapp.RecyclerViewItemCountAssertion
@@ -20,7 +20,7 @@ class CatalogBehaviourShould {
 
     @Rule
     @JvmField
-    var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
+    var mActivityTestRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
     fun load_catalog_and_maintain_state() {
@@ -29,14 +29,13 @@ class CatalogBehaviourShould {
 
         val searchAutoComplete = onView(withId(R.id.search_src_text))
 
-        searchAutoComplete.perform(replaceText("oreja"), closeSoftKeyboard())
+        searchAutoComplete.perform(replaceText("oreja de van gogh"), closeSoftKeyboard())
         val searchGoButton = onView(withId(R.id.search_go_btn))
         searchGoButton.perform(click())
 
         thread {
-            Thread.sleep(4000)
+            Thread.sleep(1000)
         }.run()
-
 
         val bottomNavigationItemView = onView(withId(R.id.fragment_favorite_music))
         bottomNavigationItemView.perform(click())
