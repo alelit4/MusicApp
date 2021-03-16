@@ -32,7 +32,6 @@ class AlbumsViewModel @ViewModelInject constructor(
         } catch (e: Exception) {
             albumsResponse.value = NetworkResult.Error("Album not found")
         }
-
     }
 
     private fun handleArtistsResponse(response: List<Album>): NetworkResult<List<Album>> {

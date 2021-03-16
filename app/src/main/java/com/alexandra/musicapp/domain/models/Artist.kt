@@ -13,7 +13,7 @@ data class Artist(
     data class Identification(
         val artistId: Int,
         val artistName: String
-    ): Parcelable {
+    ) : Parcelable {
         companion object {
             val EMPTY = Identification(0, "")
         }

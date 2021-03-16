@@ -69,6 +69,4 @@ class CatalogAdapter: RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>(){
         notifyItemInserted(oldList.size)
         catalogSize.value = itemCount
     }
-
-
 }

@@ -4,8 +4,8 @@ import android.content.Context
 import com.alexandra.musicapp.data.ConnectivityHandler.Companion.hasInternetConnection
 import com.alexandra.musicapp.data.api.MusicApiService
 import com.alexandra.musicapp.data.db.MusicAppDatabase
-import com.alexandra.musicapp.data.repository.FavoriteSongsDatabaseRepository
-import com.alexandra.musicapp.data.repository.MusicApiRepository
+import com.alexandra.musicapp.data.repositories.FavoriteSongsDatabaseRepository
+import com.alexandra.musicapp.data.repositories.MusicApiRepository
 import com.alexandra.musicapp.data.db.SongsDao
 import com.alexandra.musicapp.domain.repositories.AlbumsRepository
 import com.alexandra.musicapp.domain.repositories.ArtistsRepository
@@ -106,7 +106,6 @@ class NetworkModule {
         return MusicAppDatabase.getDatabase(application)
     }
 
-
     @Singleton
     @Provides
     fun provideSongsDao(database: MusicAppDatabase): SongsDao {
@@ -118,6 +117,4 @@ class NetworkModule {
     fun provideFavoriteSongsRepository(songsDao: SongsDao): FavoriteSongsDatabaseRepository {
         return FavoriteSongsDatabaseRepository(songsDao)
     }
-
-
 }

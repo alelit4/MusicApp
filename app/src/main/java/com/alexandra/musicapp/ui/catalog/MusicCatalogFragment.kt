@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.fragment_music_catalog.view.*
 
 @AndroidEntryPoint
 class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
-
     private lateinit var mView: View
     private val catalogAdapter by lazy { CatalogAdapter() }
     private val catalogViewModel: CatalogViewModel by activityViewModels()
@@ -93,7 +92,6 @@ class MusicCatalogFragment : Fragment(), SearchView.OnQueryTextListener {
                     is NetworkResult.Loading -> showShimmerEffect()
                 }
             })
-
     }
 
     private fun setUpAppLogoViewHandler() {

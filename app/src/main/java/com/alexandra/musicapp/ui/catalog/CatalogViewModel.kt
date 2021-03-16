@@ -25,7 +25,6 @@ class CatalogViewModel @ViewModelInject constructor(
     @Inject
     lateinit var network: NetworkModule
 
-
     fun searchArtists(searchQuery: Map<String, String>) = viewModelScope.launch {
         searchArtistsSafeCall(searchQuery)
     }
