@@ -8,19 +8,18 @@ import com.alexandra.musicapp.R
 
 class AlbumRowBindingAdapter {
 
-    companion object{
-
+    companion object {
         @BindingAdapter("retrieveAlbumYear")
         @JvmStatic
-        fun retrieveAlbumYear(textView: TextView, releaseDate: String ){
+        fun retrieveAlbumYear(textView: TextView, releaseDate: String) {
             val year = releaseDate.split("-")[0]
             textView.text = year
         }
 
         @BindingAdapter("loadAlbumImageFromUrl")
         @JvmStatic
-        fun loadAlbumImageFromUrl(imageView: ImageView, imageUrl: String){
-            imageView.load(imageUrl){
+        fun loadAlbumImageFromUrl(imageView: ImageView, imageUrl: String) {
+            imageView.load(imageUrl) {
                 crossfade(500)
                 error(R.drawable.ic_music_catalog)
             }

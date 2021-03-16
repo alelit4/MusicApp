@@ -21,11 +21,10 @@ import kotlinx.android.synthetic.main.row_layout_song.view.*
 @AndroidEntryPoint
 class FavoriteMusicFragment : Fragment(), SongsAdapter.AddFavoriteSong,
     SongsAdapter.FillFavoriteSongsButton {
-    private val TAG = "FavoriteMusicFragment"
     private lateinit var mView: View
     private val favoriteSongsViewModel: FavoriteSongsViewModel by activityViewModels()
     private val mAdapter: SongsAdapter by lazy { SongsAdapter(emptyList(), this, this) }
-    val columnCount = 2
+    private val columnCount = 2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

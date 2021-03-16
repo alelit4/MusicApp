@@ -3,9 +3,7 @@ package com.alexandra.musicapp.utils
 class QueriesHelper {
 
     companion object Factory {
-
         const val blockSize: Int = 20
-
         private const val QUERY_TERM = "term"
         private const val QUERY_ENTITY = "entity"
         private const val QUERY_ATTRIBUTE = "attribute"
@@ -17,14 +15,6 @@ class QueriesHelper {
         private const val ALBUM = "album"
         private const val SONG = "song"
 
-        fun retrieveSearchArtistsQuery(artistName: String): HashMap<String, String> {
-            val query: HashMap<String, String> = HashMap()
-            query[QUERY_TERM] = artistName
-            query[QUERY_ENTITY] = ALL_ARTIST
-            query[QUERY_ATTRIBUTE] = ALL_ARTIST_TERM
-            return query
-        }
-
         fun retrieveSearchArtistsQuery(
             artistName: String, offset: Int
         ): HashMap<String, String> {
@@ -34,13 +24,6 @@ class QueriesHelper {
             query[QUERY_ATTRIBUTE] = ALL_ARTIST_TERM
             query["limit"] = blockSize.toString()
             query["offset"] = offset.toString()
-            return query
-        }
-
-        fun retrieveSearchArtistWorkQuery(artistId: String): HashMap<String, String> {
-            val query: HashMap<String, String> = HashMap()
-            query[QUERY_ID] = artistId
-            query[QUERY_ENTITY] = ALBUM
             return query
         }
 

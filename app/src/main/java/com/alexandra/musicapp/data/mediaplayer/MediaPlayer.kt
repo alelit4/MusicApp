@@ -12,14 +12,13 @@ object MediaPlayer {
         stop()
         val uri: Uri = Uri.parse(songUrl)
         mediaPlayer = MediaPlayer().apply {
-            setAudioStreamType(AudioManager.STREAM_MUSIC)
             setDataSource(context, uri)
             prepare()
             start()
         }
     }
 
-    fun stop(){
+    fun stop() {
         if (mediaPlayer.isPlaying)
             mediaPlayer.stop()
     }

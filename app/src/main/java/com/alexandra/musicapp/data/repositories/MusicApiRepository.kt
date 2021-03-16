@@ -1,4 +1,4 @@
-package com.alexandra.musicapp.data.repository
+package com.alexandra.musicapp.data.repositories
 
 import com.alexandra.musicapp.data.api.MusicApiService
 import com.alexandra.musicapp.data.entities.asDomainModel

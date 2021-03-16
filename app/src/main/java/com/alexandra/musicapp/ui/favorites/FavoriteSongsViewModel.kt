@@ -3,7 +3,7 @@ package com.alexandra.musicapp.ui.favorites
 import android.app.Application
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.alexandra.musicapp.data.repository.FavoriteSongsDatabaseRepository
+import com.alexandra.musicapp.data.repositories.FavoriteSongsDatabaseRepository
 import com.alexandra.musicapp.domain.models.Song
 import kotlinx.coroutines.launch
 

@@ -2,7 +2,7 @@ package com.alexandra.musicapp
 
 import com.alexandra.musicapp.data.api.MusicApiService
 import com.alexandra.musicapp.data.entities.*
-import com.alexandra.musicapp.data.repository.MusicApiRepository
+import com.alexandra.musicapp.data.repositories.MusicApiRepository
 import com.alexandra.musicapp.utils.QueriesHelper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -70,8 +70,6 @@ class MusicApiRepositoryShould {
         Assert.assertEquals(fakeSongsResult.asDomainModel(), response)
     }
 
-
-
     private fun createFakeArtistsResult(fakeArtistName: String): ArtistsResult {
         val fakeArtistEntity = ArtistEntity(1, 1, fakeArtistName, "anArtistType", "aGenreName")
         val fakeArtistEntityList = listOf(fakeArtistEntity)
@@ -100,9 +98,6 @@ class MusicApiRepositoryShould {
     private fun createFakeNetworkResult(fakeArtistResult: ArtistsResult) =
         Response.success(fakeArtistResult)
 
-
     private fun createFakeNetworkResult(fakeSongsResult: SongsResult) =
         Response.success(fakeSongsResult)
-
-
 }

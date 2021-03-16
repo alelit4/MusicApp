@@ -1,6 +1,5 @@
-package com.alexandra.musicapp.data.repository
+package com.alexandra.musicapp.data.repositories
 
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.alexandra.musicapp.data.db.SongsDao
@@ -20,8 +19,6 @@ class FavoriteSongsDatabaseRepository @Inject constructor(
         }
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
     override suspend fun insert(song: Song) {
         songsDao.insert(song.asEntity())
     }

@@ -18,9 +18,6 @@ class SongsViewModel @ViewModelInject constructor(
     application: Application
 ) : AndroidViewModel(application) {
     var offset: Int = 0
-    var isLoading: Boolean = false
-    var isAllDataDownloaded: Boolean = false
-    var queryCollectionId: String = ""
     var songsResponse: MutableLiveData<NetworkResult<List<Song>>> = MutableLiveData()
     var songs: MutableLiveData<List<Song>> = MutableLiveData()
 
@@ -60,11 +57,5 @@ class SongsViewModel @ViewModelInject constructor(
         val customDiffUtil = CustomDiffUtils(oldList.toList(), songs)
         val diffUtilResult = DiffUtil.calculateDiff(customDiffUtil)
         this.songs.value = songs
-    }
-
-    private fun addData(songs: List<Song>) {
-        val oldList = this.songs.value as MutableList<Song>
-        oldList.addAll(songs)
-        this.songs.value = oldList
     }
 }
