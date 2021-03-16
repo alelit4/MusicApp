@@ -3,10 +3,11 @@ package com.alexandra.musicapp.ui
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.alexandra.musicapp.R
 import com.alexandra.musicapp.RecyclerViewItemCountAssertion
 import org.junit.Rule
@@ -15,7 +16,7 @@ import org.junit.runner.RunWith
 import kotlin.concurrent.thread
 
 @LargeTest
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class CatalogBehaviourShould {
 
     @Rule
